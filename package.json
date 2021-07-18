@@ -6,15 +6,34 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "next-lint": "next lint",
+    "lint-fix": "eslint --cache --fix .",
+    "check-lint": "eslint .",
+    "test-all-and-build": "npm run next-lint && npm run check-lint && npm run build",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,jsx,css,scss,md}": "npm run lint-fix"
   },
   "dependencies": {
     "next": "11.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "sass": "^1.35.2"
   },
+  "browserslist": [
+    "defaults"
+  ],
   "devDependencies": {
     "eslint": "7.31.0",
-    "eslint-config-next": "11.0.1"
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-next": "11.0.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-tailwindcss": "^1.14.1",
+    "husky": "^7.0.1",
+    "lint-staged": "^11.0.1",
+    "prettier": "^2.3.2"
   }
 }

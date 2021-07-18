@@ -1,0 +1,28 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo '🏗️👷 Styling, testing and building your project before committing'
+
+#lint-staged
+npx lint-staged ||
+(
+    echo 'Couldnt run lint-staged.';
+    false;
+)
+
+#next-lint
+npm run next-lint ||
+(
+    echo 'next-lint Check Failed. Run npm run next-lint, add changes and try commit again.';
+    false;
+)
+
+#check ESLint Standards
+npm run check-lint ||
+(
+        echo 'ESLint Check Failed. Make the required changes listed above, add changes and try to commit again.'
+        false; 
+)
+
+# If everything passes... Now we can commit
+echo '✅✅✅✅ You win this time... I am committing this now. ✅✅✅✅'npx lint-staged

@@ -1,0 +1,82 @@
+$min-widths: (
+  mobile-phone: 640px,
+  tablet: 768px,
+  tablet-landscape: 991px,
+  large-desktop: 1024px,
+  extra-large-desktop: 1280px,
+);
+
+@function min-width-for($width-name) {
+  $width: map-get($min-widths, $width-name);
+  @return "min-width: #{$width}";
+}
+
+@function max-width-for($width-name) {
+  $width: map-get($min-widths, $width-name);
+  @return "max-width: #{$width}";
+}
+
+//media-query
+@mixin max-break-point($point) {
+  @if $point == mobile-phone {
+    @media (max-width-for("mobile-phone")) {
+      @content;
+    }
+  }
+
+  @if $point == tablet {
+    @media (max-width-for("tablet")) {
+      @content;
+    }
+  }
+
+  @if $point == tablet-landscape {
+    @media (max-width-for("tablet-landscape")) {
+      @content;
+    }
+  }
+
+  @if $point == large-desktop {
+    @media (max-width-for("large-desktop")) {
+      @content;
+    }
+  }
+
+  @if $point == extra-large-desktop {
+    @media (max-width-for("extra-large-desktop")) {
+      @content;
+    }
+  }
+}
+
+@mixin min-break-point($point) {
+  @if $point == mobile-phone {
+    @media (min-width-for("mobile-phone")) {
+      @content;
+    }
+  }
+
+  @if $point == tablet {
+    @media (min-width-for("tablet")) {
+      @content;
+    }
+  }
+
+  @if $point == tablet-landscape {
+    @media (min-width-for("tablet-landscape")) {
+      @content;
+    }
+  }
+
+  @if $point == large-desktop {
+    @media (min-width-for("large-desktop")) {
+      @content;
+    }
+  }
+
+  @if $point == extra-large-desktop {
+    @media (min-width-for("extra-large-desktop")) {
+      @content;
+    }
+  }
+}
