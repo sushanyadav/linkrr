@@ -22,6 +22,7 @@ module.exports = {
   },
   plugins: ["react", "import", "prettier"],
   rules: {
+    "new-cap": 0,
     "no-console": ["warn", { allow: ["warn"] }],
 
     //* disables js doc

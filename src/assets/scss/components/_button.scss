@@ -1,0 +1,11 @@
+button {
+  &.primary {
+    background-color: #000;
+    color: white;
+    padding: 0.5rem 2rem;
+  }
+
+  &:disabled {
+    background-color: lighten($color: #000, $amount: 20);
+  }
+}
