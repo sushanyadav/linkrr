@@ -1,7 +1,4 @@
-.login-content {
-  @extend .flex-ai-c-jc-c;
-  @extend .flex-col;
-  
+.login-content{
   h1 {
     margin-bottom: 0.5rem;
   }
@@ -12,12 +9,6 @@
 
   .or {
     margin: 0.5rem 0rem;
-  }
-
-  .error {
-    color: #a94442;
-    font-size: 12px;
-    font-weight: bold;
   }
 
 }

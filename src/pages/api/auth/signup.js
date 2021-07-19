@@ -44,7 +44,7 @@ const handler = async (req, res) => {
 
   const result = await db
     .collection("users")
-    .insertOne({ email, password: hashedPassword });
+    .insertOne({ email, password: hashedPassword, provider: "credentials" });
 
   res.status(201).json({ message: "Created user!", result });
   client.close();

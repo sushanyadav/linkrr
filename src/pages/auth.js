@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { signIn, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 
@@ -33,23 +33,8 @@ const AuthPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
-
-  useEffect(() => {
-    getSession().then((session) => {
-      if (session) {
-        router.replace("/");
-      } else {
-        setIsLoading(false);
-      }
-    });
-  }, [router]);
-
-  if (isLoading) {
-    return <div></div>;
-  }
 
   const switchAuthModeHandler = () => {
     setEmail("");
@@ -61,7 +46,7 @@ const AuthPage = () => {
   };
 
   const login = async () => {
-    const result = await signIn("credentials", {
+    const result = await signIn("login", {
       redirect: false,
       email: email,
       password: password,
@@ -70,6 +55,18 @@ const AuthPage = () => {
     setIsSubmitting(false);
     if (result.error) {
       setError(result.error);
+    } else {
+      router.replace("/");
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    const result = await signIn("google", {
+      redirect: false,
+    });
+
+    if (result) {
+      setIsSubmitting(false);
     } else {
       router.replace("/");
     }
@@ -121,7 +118,7 @@ const AuthPage = () => {
 
   return (
     <div className="container center-vph-w-header">
-      <div className="login-content">
+      <div className="form-content login-content">
         <form onSubmit={submitHandler}>
           <fieldset>
             <legend>
@@ -164,13 +161,13 @@ const AuthPage = () => {
             )}
             {error && <p className="error">{error}</p>}
             <button disabled={isSubmitting} type="submit" className="primary">
-              Submit
+              {isSubmitting ? "Submitting" : "Submit"}
             </button>
           </fieldset>
         </form>
         <hr className="separator" />
         <span className="or">OR</span>
-        <button className="primary">
+        <button className="primary" onClick={loginWithGoogle}>
           {isLogin ? "Login in" : "Sign up"} using google
         </button>
         <button className="auth-switcher" onClick={switchAuthModeHandler}>
@@ -182,5 +179,19 @@ const AuthPage = () => {
     </div>
   );
 };
+
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
+
+  if (session) {
+    return {
+      redirect: { destination: "/", permanent: false },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+}
 
 export default AuthPage;
