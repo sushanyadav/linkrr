@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signIn, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { validateEmail, validatePassword } from "utils/validate";
 
@@ -145,6 +146,11 @@ const AuthPage = () => {
                 required
                 type="password"
               />
+              <Link href="/forgot-password">
+                <a>
+                  <small>Forgot password</small>
+                </a>
+              </Link>
             </label>
             {!isLogin && (
               <label htmlFor="confirm-password">

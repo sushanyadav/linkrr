@@ -41,6 +41,7 @@ button {
 a {
   text-decoration: none;
   cursor: pointer;
+  color: black;
 
   &:hover {
     text-decoration: none;
@@ -56,10 +57,14 @@ h1 {
   font-size: 1.5em;
 }
 
+form {
+  width: 100%;
+  max-width: 420px;
+}
+
 legend {
   margin-bottom: 1.5rem;
-font-size: 1.8rem;
-  
+  font-size: 1.8rem; 
 }
 
 fieldset {

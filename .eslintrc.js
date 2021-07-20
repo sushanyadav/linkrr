@@ -1,5 +1,5 @@
 module.exports = {
-  ignorePatterns: ["node_modules", ".next", "public", "src/assets"],
+  ignorePatterns: ["node_modules", ".next", "public", "assets"],
   env: {
     browser: true,
     es2021: true,
@@ -23,7 +23,7 @@ module.exports = {
   plugins: ["react", "import", "prettier"],
   rules: {
     "new-cap": 0,
-    "no-console": ["warn", { allow: ["warn"] }],
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
 
     //* disables js doc
     "require-jsdoc": 0,

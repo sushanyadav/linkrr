@@ -3,8 +3,8 @@ import { useState } from "react";
 import { validateEmail } from "utils/validate";
 
 const sendEmail = async (email) => {
-  // create user
-  const response = await fetch(`/api/user/forget-password`, {
+  // send magic link to user's email
+  const response = await fetch(`/api/user/forgot-password`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,7 @@ const sendEmail = async (email) => {
   return data;
 };
 
-const ForgetPasswordPage = () => {
+const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -32,6 +32,7 @@ const ForgetPasswordPage = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setError("");
+    setFeedback("");
     const isEmailValid = validateEmail(email);
 
     if (!isEmailValid) {
@@ -46,7 +47,7 @@ const ForgetPasswordPage = () => {
 
       if (result) {
         setIsSubmitting(false);
-        setFeedback("Email sent");
+        setFeedback(result.message);
       }
     } catch (error) {
       setError(error.message);
@@ -81,4 +82,4 @@ const ForgetPasswordPage = () => {
   );
 };
 
-export default ForgetPasswordPage;
+export default ForgotPasswordPage;

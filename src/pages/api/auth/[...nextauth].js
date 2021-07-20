@@ -36,7 +36,7 @@ export default NextAuth({
 
         client.close();
 
-        return { email: user.email };
+        return { email: user.email, provider: "google" };
       },
     }),
     Providers.Google({
@@ -63,11 +63,14 @@ export default NextAuth({
           });
         }
 
+        client.close();
+
         return {
           id: profile.id,
           name: profile.name,
           email: profile.email,
           image: profile.picture,
+          provider: "google",
         };
       },
     }),
@@ -75,11 +78,11 @@ export default NextAuth({
   ],
   pages: { signIn: "/auth" },
   session: {
-    jwt: process.env.JWT_AUTO_GENERATED_SIGNING_KEY,
+    jwt: process.env.JWT_AUTO_GENERATED_SIGNING_KEY, // for credentials
     maxAge: 15 * 24 * 60 * 60, // 15 days
   },
   jwt: {
-    signingKey: process.env.JWT_SIGNING_PRIVATE_KEY,
+    signingKey: process.env.JWT_SIGNING_PRIVATE_KEY, // for google
     maxAge: 15 * 24 * 60 * 60, // 15 days
   },
 });
