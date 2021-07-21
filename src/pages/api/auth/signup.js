@@ -32,7 +32,11 @@ const handler = async (req, res) => {
   try {
     client = await connectToDatabase();
   } catch (error) {
-    throw new Error("Couldn't connect to database!");
+    res.status(400).json({
+      message: "Couldn't connect to database!",
+    });
+
+    return;
   }
 
   const db = client.db();

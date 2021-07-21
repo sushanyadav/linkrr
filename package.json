@@ -16,9 +16,9 @@
     "*.{js,jsx,css,scss,md}": "npm run lint-fix"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.4.5",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^8.5.1",
-    "mailgun-js": "^0.22.0",
     "mongodb": "^4.0.0",
     "next": "11.0.1",
     "next-auth": "^3.27.3",

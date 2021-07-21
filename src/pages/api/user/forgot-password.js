@@ -1,10 +1,9 @@
 import { connectToDatabase } from "lib/db";
 
+const mail = require("@sendgrid/mail");
 const jwt = require("jsonwebtoken");
-const mailgun = require("mailgun-js")({
-  apiKey: process.env.MAILGUN_API_KEY,
-  domain: process.env.MAILGUN_DOMAIN,
-});
+
+mail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const handler = async (req, res) => {
   if (req.method !== "POST") return;
@@ -69,17 +68,18 @@ const handler = async (req, res) => {
     process.env.BASE_URL
   }/reset-password/${user._id.toString()}/${token}`;
 
-  // send this link to email to reset password
-  const mailGunData = {
-    from: "Linkrr <sushanyadav98@gmail.com>",
+  const msg = {
     to: email,
+    from: process.env.SENDGRID_VERIFY_SENDER_EMAIL, // Use the email address or domain you verified above
     subject:
       "Hello! Here is your password reset link which is valid for 15 minutes.",
-    html: `<a href=${link}>Reset your password</a>`,
+    text: "Link is valid only for 15 minutes.",
+    html: `<a href=${link}>Click here to reset your password</a>`,
   };
 
   try {
-    await mailgun.messages().send(mailGunData);
+    await mail.send(msg);
+
     res
       .status(200)
       .json({ message: `Password reset link is sent to ${user.email}` });
