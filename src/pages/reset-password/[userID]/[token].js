@@ -194,7 +194,7 @@ export async function getServerSideProps(context) {
   } catch (err) {
     return {
       props: {
-        errorFromServer: "Couldn't find the user !!",
+        errorFromServer: "Couldn't do find operation ! Please try again later.",
       },
     };
   }

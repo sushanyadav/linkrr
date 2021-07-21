@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -36,6 +36,14 @@ const AuthPage = () => {
   const [error, setError] = useState("");
 
   const router = useRouter();
+  const { error: errorFromProvider } = router.query;
+
+  useEffect(() => {
+    if (errorFromProvider) {
+      setError(errorFromProvider);
+      window.history.replaceState(null, "", router.pathname);
+    }
+  }, [errorFromProvider, router]);
 
   const switchAuthModeHandler = () => {
     setEmail("");
@@ -62,15 +70,7 @@ const AuthPage = () => {
   };
 
   const loginWithGoogle = async () => {
-    const result = await signIn("google", {
-      redirect: false,
-    });
-
-    if (result) {
-      setIsSubmitting(false);
-    } else {
-      router.replace("/");
-    }
+    await signIn("google", { callbackUrl: "/forgot-password" });
   };
 
   const submitHandler = async (e) => {
