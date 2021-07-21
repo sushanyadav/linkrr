@@ -10,14 +10,27 @@ export default NextAuth({
     Providers.Credentials({
       id: "login",
       async authorize(credentials) {
+        let client;
+
         // Check if the user is authorized
-        const client = await connectToDatabase();
+        try {
+          client = await connectToDatabase();
+        } catch (error) {
+          throw new Error("Couldn't connect to database!");
+        }
 
         const userCollection = client.db().collection("users");
+        let user;
 
-        const user = await userCollection.findOne({
-          email: credentials.email,
-        });
+        try {
+          user = await userCollection.findOne({
+            email: credentials.email,
+          });
+        } catch (error) {
+          client.close();
+
+          throw new Error("Couldn't do find operation !");
+        }
 
         if (!user) {
           client.close();
@@ -31,36 +44,59 @@ export default NextAuth({
 
         if (!isValid) {
           client.close();
-          throw new Error("Couldn't log you in!");
+          throw new Error("Couldn't log you in! Credential didn't match.");
         }
 
         client.close();
 
-        return { email: user.email, provider: "google" };
+        return { email: user.email, provider: "credentials" };
       },
     }),
     Providers.Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       async profile(profile) {
-        const client = await connectToDatabase();
+        let client;
+
+        // Check if the user is authorized
+        try {
+          client = await connectToDatabase();
+        } catch (error) {
+          throw new Error("Couldn't connect to database!");
+        }
 
         const db = client.db();
 
         const userCollection = db.collection("users");
+        let user;
 
-        const user = await userCollection.findOne({
-          email: profile.email,
-        });
+        try {
+          user = await userCollection.findOne({
+            email: profile.email,
+          });
+        } catch (error) {
+          client.close();
+
+          throw new Error("Couldn't do find operation !");
+        }
 
         if (!user) {
-          await db.collection("users").insertOne({
-            id: profile.id,
-            name: profile.name,
-            email: profile.email,
-            image: profile.picture,
-            provider: "google",
-          });
+          try {
+            await db.collection("users").insertOne({
+              id: profile.id,
+              name: profile.name,
+              email: profile.email,
+              image: profile.picture,
+              provider: "google",
+            });
+          } catch (error) {
+            client.close();
+            res.status(500).json({
+              message: "Storing user failed.",
+            });
+
+            return;
+          }
         }
 
         client.close();

@@ -27,7 +27,13 @@ const handler = async (req, res) => {
     return;
   }
 
-  const client = await connectToDatabase();
+  let client;
+
+  try {
+    client = await connectToDatabase();
+  } catch (error) {
+    throw new Error("Couldn't connect to database!");
+  }
 
   const db = client.db();
 
@@ -42,12 +48,21 @@ const handler = async (req, res) => {
 
   const hashedPassword = await hashPassword(password);
 
-  const result = await db
-    .collection("users")
-    .insertOne({ email, password: hashedPassword, provider: "credentials" });
+  try {
+    const result = await db
+      .collection("users")
+      .insertOne({ email, password: hashedPassword, provider: "credentials" });
 
-  res.status(201).json({ message: "Created user!", result });
-  client.close();
+    res.status(201).json({ message: "Created user!", result });
+    client.close();
+  } catch (error) {
+    client.close();
+    res.status(500).json({
+      message: "Storing user failed.",
+    });
+
+    return;
+  }
 };
 
 export default handler;

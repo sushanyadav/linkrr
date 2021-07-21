@@ -11,13 +11,32 @@ const handler = async (req, res) => {
   const data = req.body;
   const { email } = data;
 
-  const client = await connectToDatabase();
+  let client;
+
+  try {
+    client = await connectToDatabase();
+  } catch (error) {
+    res.status(400).json({
+      message: "Couldn't connect to database!",
+    });
+
+    return;
+  }
 
   const userCollection = client.db().collection("users");
 
-  const user = await userCollection.findOne({
-    email,
-  });
+  let user;
+
+  try {
+    user = await userCollection.findOne({
+      email,
+    });
+  } catch (err) {
+    res.status(422).json({ message: "Couldn't find the user." });
+    client.close();
+
+    return;
+  }
 
   if (!user) {
     res.status(422).json({ message: "User don't exists." });

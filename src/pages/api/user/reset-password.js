@@ -20,16 +20,35 @@ const handler = async (req, res) => {
     return;
   }
 
-  const client = await connectToDatabase();
+  let client;
+
+  try {
+    client = await connectToDatabase();
+  } catch (error) {
+    res.status(400).json({
+      message: "Couldn't connect to database!",
+    });
+
+    return;
+  }
 
   const userCollection = client.db().collection("users");
 
-  const user = await userCollection.findOne({
-    email,
-  });
+  let user;
+
+  try {
+    user = await userCollection.findOne({
+      email,
+    });
+  } catch (err) {
+    res.status(404).json({ message: "Invalid user id." });
+    client.close();
+
+    return;
+  }
 
   if (!user) {
-    res.status(404).json({ message: "Invalid user id." });
+    res.status(422).json({ message: "Invalid user id." });
     client.close();
 
     return;

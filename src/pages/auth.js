@@ -146,11 +146,13 @@ const AuthPage = () => {
                 required
                 type="password"
               />
-              <Link href="/forgot-password">
-                <a>
-                  <small>Forgot password</small>
-                </a>
-              </Link>
+              {isLogin && (
+                <Link href="/forgot-password">
+                  <a>
+                    <small>Forgot password</small>
+                  </a>
+                </Link>
+              )}
             </label>
             {!isLogin && (
               <label htmlFor="confirm-password">

@@ -137,7 +137,7 @@ const ResetPassword = ({ errorFromServer, payload }) => {
           {feedback && (
             <>
               <p className="feedback">{feedback}</p>
-              <div>Redirecting you to log in page...</div>
+              <p className="feedback">Redirecting you to log in page...</p>
             </>
           )}
           <button disabled={isSubmitting} type="submit" className="primary">
@@ -162,8 +162,18 @@ ResetPassword.propTypes = {
 export async function getServerSideProps(context) {
   const { userID, token } = context.query;
 
+  let client;
+
   // check if user exist in database
-  const client = await connectToDatabase();
+  try {
+    client = await connectToDatabase();
+  } catch (error) {
+    return {
+      props: {
+        errorFromServer: "Couldn't connect to database!",
+      },
+    };
+  }
 
   const userCollection = client.db().collection("users");
 
@@ -175,9 +185,19 @@ export async function getServerSideProps(context) {
     };
   }
 
-  const user = await userCollection.findOne({
-    _id: ObjectId(userID),
-  });
+  let user;
+
+  try {
+    user = await userCollection.findOne({
+      _id: ObjectId(userID),
+    });
+  } catch (err) {
+    return {
+      props: {
+        errorFromServer: "Couldn't find the user !!",
+      },
+    };
+  }
 
   if (!user) {
     client.close();
