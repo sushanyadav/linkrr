@@ -58,7 +58,10 @@ const ForgotPasswordPage = () => {
 
   return (
     <div className="container center-vph-w-header form-content">
-      <form onSubmit={submitHandler}>
+      <form
+        onSubmit={submitHandler}
+        style={{ maxWidth: "420px", minWidth: "320px" }}
+      >
         <fieldset>
           <legend>Forget password</legend>
           <label htmlFor="email">
@@ -69,7 +72,7 @@ const ForgotPasswordPage = () => {
               id="email"
               name="email"
               required
-              type="text"
+              type="email"
             />
           </label>
           {error && <p className="error">{error}</p>}

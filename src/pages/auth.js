@@ -120,7 +120,10 @@ const AuthPage = () => {
   return (
     <div className="container center-vph-w-header">
       <div className="form-content login-content">
-        <form onSubmit={submitHandler}>
+        <form
+          onSubmit={submitHandler}
+          style={{ maxWidth: "420px", minWidth: "320px" }}
+        >
           <fieldset>
             <legend>
               {isLogin ? "Login in to" : "Sign up for"} an account
@@ -133,7 +136,7 @@ const AuthPage = () => {
                 id="email"
                 name="email"
                 required
-                type="text"
+                type="email"
               />
             </label>
             <label htmlFor="password">

@@ -1,0 +1,33 @@
+.link-section-wrapper {
+  margin: 2rem 0;
+  display: flex;
+
+  .form-section {
+    flex-basis: 60%;
+    margin-right: 2rem;
+
+  }
+
+  .link-section-heading {
+    margin-bottom: 2rem;
+  }
+
+
+  .preview-section {
+    background-color: black;
+    flex-basis: 40%;
+  }
+}
+
+.preview-image {
+  border-radius: 100%;
+}
+
+.preview-placeholder {
+  width: 60px;
+  height:60px;
+  background-color: #ccc;
+  border-radius: 100%;
+  @extend .flex-ai-c-jc-c;
+  @extend .flex-col;
+}

@@ -108,7 +108,10 @@ const ResetPassword = ({ errorFromServer, payload }) => {
 
   return (
     <div className="container center-vph-w-header form-content">
-      <form onSubmit={submitHandler}>
+      <form
+        onSubmit={submitHandler}
+        style={{ maxWidth: "420px", minWidth: "320px" }}
+      >
         <fieldset>
           <legend>Change password for {payload.email}</legend>
           <label htmlFor="password">
@@ -122,6 +125,7 @@ const ResetPassword = ({ errorFromServer, payload }) => {
               type="password"
             />
           </label>
+
           <label htmlFor="confirmPassword">
             <span>Confirm your new password</span>
             <input

@@ -23,7 +23,7 @@ module.exports = {
   plugins: ["react", "import", "prettier"],
   rules: {
     "new-cap": 0,
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
 
     //* disables js doc
     "require-jsdoc": 0,

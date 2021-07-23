@@ -66,19 +66,30 @@ background-color: #f5f5f5;
   @extend .flex-ai-c-jc-c;
 }
 
-.form-content {
+.form-content{
   @extend .flex-ai-c-jc-c;
   @extend .flex-col;
+}
 
-  .error {
-    color: #a94442;
-    font-size: 12px;
-    font-weight: bold;
-  }
+.error {
+  color: #a94442;
+  font-size: 12px;
+  font-weight: bold;
+}
+.feedback {
+  color: #3b5998;
+  font-size: 12px;
+  font-weight: bold;
+}
 
-  .feedback {
-    color: #3b5998;
-    font-size: 12px;
-    font-weight: bold;
-  }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
