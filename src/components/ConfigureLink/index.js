@@ -4,10 +4,14 @@ import Form from "./Form";
 import Preview from "./Preview";
 
 const ConfigureLink = ({ heading, link }) => {
+  const getFormValues = (values) => {
+    // console.log(values, "values");
+  };
+
   return (
     <div className="link-section-wrapper">
       <div className="form-section">
-        <Form heading={heading} link={link} />
+        <Form heading={heading} link={link} getFormValues={getFormValues} />
       </div>
       <Preview />
     </div>

@@ -4,11 +4,12 @@ import Image from "next/image";
 
 const ImageFileInput = ({
   setFieldValue,
+  setFieldTouched,
   error,
-  setFileTouched,
-  fileTouched,
+  name,
+  touched,
 }) => {
-  const [previewSource, setPreviewSource] = useState("");
+  const [previewSource, setPreviewSource] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const previewFile = (file) => {
@@ -38,13 +39,15 @@ const ImageFileInput = ({
         )}
 
         <input
-          id="file"
-          name="file"
+          id={name}
+          name={name}
           type="file"
           onChange={(event) => {
             const file = event.currentTarget.files[0];
 
-            setFieldValue("file", file);
+            setFieldTouched(name, true);
+
+            setFieldValue(name, file);
             if (file) {
               previewFile(file);
             }
@@ -53,16 +56,12 @@ const ImageFileInput = ({
           accept="image/png, image/gif, image/jpeg"
           style={{ display: "none" }}
         />
-        <label
-          htmlFor="file"
-          onClick={() => setFileTouched(true)}
-          style={{ marginLeft: "1rem" }}
-        >
+        <label htmlFor={name} style={{ marginLeft: "1rem" }}>
           Browse
         </label>
       </div>
 
-      {fileTouched && error && <p className="error">{error}</p>}
+      {touched && error && <p className="error">{error}</p>}
       {!error && loading && <p className="feedback">Loading...</p>}
     </>
   );
@@ -70,13 +69,15 @@ const ImageFileInput = ({
 
 ImageFileInput.defaultProps = {
   error: undefined,
+  touched: undefined,
 };
 
 ImageFileInput.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
-  setFileTouched: PropTypes.func.isRequired,
+  setFieldTouched: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
   error: PropTypes.string,
-  fileTouched: PropTypes.bool.isRequired,
+  touched: PropTypes.bool,
 };
 
 export default ImageFileInput;

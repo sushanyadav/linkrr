@@ -67,6 +67,11 @@ legend {
   font-weight: bold;
 }
 
+.legend-without-margin {
+ @extend legend;
+ margin: 0;
+}
+
 fieldset {
   *:not(:first-child) {
   margin-bottom: 0.8rem;
@@ -85,6 +90,14 @@ font-size: 1rem;
  *:not(:last-child) {
    margin-bottom: 0.3rem;
  }
+}
+
+.label-horizontal {
+  @extend label;
+  @extend .flex-row;
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 
@@ -106,17 +119,33 @@ input[type="email"] {
 }
 
 .ml-2 {
-  margin-left: 0.5rem;
+  margin-left: 1.5rem;
 }
 
 .mr-2 {
-  margin-right: 0.5rem;
+  margin-right: 1.5rem;
 }
 
 .mt-2 {
-  margin-top: 0.5rem;
+  margin-top: 1.5rem;
 }
 
 .mb-2 {
+  margin-bottom: 1.5rem;
+}
+
+.ml-1 {
+  margin-left: 0.5rem;
+}
+
+.mr-1 {
+  margin-right: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mb-1 {
   margin-bottom: 0.5rem;
 }
