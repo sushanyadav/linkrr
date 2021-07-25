@@ -1,10 +1,11 @@
 import { Formik, Form, FieldArray } from "formik";
 import PropTypes from "prop-types";
 
+import ImageFileInput from "components/Form/ProfileImageFileInput";
 import TextInput from "components/Form/TextInput";
 import ColorInput from "components/Form/ColorInput";
-import ImageFileInput from "components/Form/ProfileImageFileInput";
 import FileInput from "components/Form/IconImageFileInput";
+import CheckboxInput from "components/Form/CheckboxInput";
 
 import { validateLinkForm } from "utils/validate";
 
@@ -33,25 +34,35 @@ const FormikForm = ({
         <legend>Personal Details</legend>
 
         <ImageFileInput
-          name="profileImage"
-          touched={touched.profileImage}
-          error={errors.profileImage}
+          name="personalDetails.profileImage"
+          touched={touched.personalDetails?.profileImage}
+          error={errors.personalDetails?.profileImage}
           setFieldValue={setFieldValue}
           setFieldTouched={setFieldTouched}
         />
 
         <div className="flex">
           <div className="input-wrapper">
-            <TextInput label="Name" name="name" type="text" placeholder="" />
+            <TextInput
+              label="Name"
+              name="personalDetails.name"
+              type="text"
+              placeholder=""
+            />
           </div>
           <div className="input-wrapper ml-2">
-            <TextInput label="Title" name="title" type="text" placeholder="" />
+            <TextInput
+              label="Title"
+              name="personalDetails.title"
+              type="text"
+              placeholder=""
+            />
           </div>
           <div className="input-wrapper ml-2">
             <ColorInput
               labelAdditionalClassName="label-horizontal"
               label="Background Color"
-              name="backgroundColor"
+              name="personalDetails.backgroundColor"
               type="color"
             />
           </div>
@@ -59,7 +70,7 @@ const FormikForm = ({
       </fieldset>
       <fieldset>
         <FieldArray
-          name="socials"
+          name="socials.socials"
           render={({ remove, push }) => (
             <>
               <div className="flex flex-ai-c flex-jc-sb mb-2">
@@ -74,12 +85,12 @@ const FormikForm = ({
                   Add more
                 </button>
               </div>
-              {values.socials.map((social, index) => (
+              {values.socials.socials.map((social, index) => (
                 <div key={index} className="flex ">
                   <div className="input-wrapper">
                     <TextInput
                       label="Name"
-                      name={`socials[${index}].name`}
+                      name={`socials.socials[${index}].name`}
                       type="text"
                       placeholder=""
                     />
@@ -87,7 +98,7 @@ const FormikForm = ({
                   <div className="input-wrapper ml-1">
                     <TextInput
                       label="Link"
-                      name={`socials[${index}].link`}
+                      name={`socials.socials[${index}].link`}
                       type="text"
                       placeholder=""
                     />
@@ -98,18 +109,22 @@ const FormikForm = ({
                       setFieldValue={setFieldValue}
                       setFieldTouched={setFieldTouched}
                       touched={
-                        touched.socials ? touched.socials[index]?.icon : null
+                        touched.socials?.socials
+                          ? touched.socials.socials[index]?.icon
+                          : null
                       }
                       error={
-                        errors.socials ? errors.socials[index]?.icon : null
+                        errors.socials?.socials
+                          ? errors.socials.socials[index]?.icon
+                          : null
                       }
-                      name={`socials[${index}].icon`}
+                      name={`socials.socials[${index}].icon`}
                     />
                   </div>
                   <div className="input-wrapper ml-2">
                     <ColorInput
                       label="Color"
-                      name={`socials[${index}].color`}
+                      name={`socials.socials[${index}].color`}
                       type="color"
                     />
                   </div>
@@ -118,7 +133,7 @@ const FormikForm = ({
                     <button
                       className="primary"
                       type="button"
-                      disabled={values.socials.length <= 1}
+                      disabled={values.socials.socials.length <= 1}
                       onClick={() => remove(index)}
                     >
                       Delete
@@ -132,20 +147,35 @@ const FormikForm = ({
         {errors.socials && typeof errors.socials === "string" && (
           <p className="error">{errors.socials}</p>
         )}
+        <CheckboxInput
+          label="Show favicon"
+          labelAdditionalClassName="label-horizontal"
+          name="socials.showFavicon"
+          type="checkbox"
+        />
       </fieldset>
       <fieldset>
-        <legend>Contact Form</legend>
-
+        <div className="flex flex-ai-c flex-jc-sb mb-2">
+          <legend className="legend-without-margin">Contact Form</legend>
+          <CheckboxInput noLabel name="contactForm.toggle" type="checkbox" />
+        </div>
         <div style={{ width: "40%" }}>
           <TextInput
-            label="Email Addresses"
-            name="apiEmailAddress"
+            label="Email Address"
+            name="contactForm.apiEmailAddress"
             type="text"
             placeholder=""
+            disabled={!values.contactForm.toggle}
           />
         </div>
         <div style={{ width: "40%" }}>
-          <TextInput label="API Key" name="apiKey" type="text" placeholder="" />
+          <TextInput
+            label="API Key"
+            name="contactForm.apiKey"
+            type="text"
+            placeholder=""
+            disabled={!values.contactForm.toggle}
+          />
         </div>
       </fieldset>
       <button type="submit" disabled={isSubmitting} className="primary">
@@ -170,12 +200,18 @@ FormikForm.propTypes = {
 
 const LinkFrom = ({ heading, link, getFormValues }) => {
   const initialFormValues = {
-    profileImage: null,
-    name: "",
-    title: "",
     link: link,
-    backgroundColor: "#18493E",
-    socials: [{ name: "", link: "", color: "#000000", icon: null }],
+    personalDetails: {
+      profileImage: null,
+      name: "",
+      title: "",
+      backgroundColor: "#18493E",
+    },
+    socials: {
+      socials: [{ name: "", link: "", color: "#000000", icon: null }],
+      showFavicon: true,
+    },
+    contactForm: { toggle: false, apiEmailAddress: "", apiKey: "" },
   };
 
   const handleSubmit = (values, { setSubmitting }) => {
