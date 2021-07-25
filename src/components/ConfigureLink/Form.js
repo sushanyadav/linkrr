@@ -1,13 +1,14 @@
 import { Formik, Form, FieldArray } from "formik";
 import PropTypes from "prop-types";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 import ImageFileInput from "components/Form/ProfileImageFileInput";
 import TextInput from "components/Form/TextInput";
 import ColorInput from "components/Form/ColorInput";
-import FileInput from "components/Form/IconImageFileInput";
 import CheckboxInput from "components/Form/CheckboxInput";
 
-import { validateLinkForm } from "utils/validate";
+import { validationSchema } from "../../utils/validate";
 
 const FormikForm = ({
   heading,
@@ -20,6 +21,11 @@ const FormikForm = ({
   getFormValues,
 }) => {
   getFormValues(values);
+
+  if (!values.contactForm.toggle) {
+    values.contactForm.apiEmailAddress = "";
+    values.contactForm.apiKey = "";
+  }
 
   return (
     <Form>
@@ -103,33 +109,7 @@ const FormikForm = ({
                       placeholder=""
                     />
                   </div>
-                  <div className="input-wrapper ml-1">
-                    <FileInput
-                      label="Icon"
-                      setFieldValue={setFieldValue}
-                      setFieldTouched={setFieldTouched}
-                      touched={
-                        touched.socials?.socials
-                          ? touched.socials.socials[index]?.icon
-                          : null
-                      }
-                      error={
-                        errors.socials?.socials
-                          ? errors.socials.socials[index]?.icon
-                          : null
-                      }
-                      name={`socials.socials[${index}].icon`}
-                    />
-                  </div>
-                  <div className="input-wrapper ml-2">
-                    <ColorInput
-                      label="Color"
-                      name={`socials.socials[${index}].color`}
-                      type="color"
-                    />
-                  </div>
-
-                  <div className="flex ml-1 flex-ai-c flex-jc-e input-wrapper">
+                  <div className="flex ml-1 flex-ai-c flex-jc-e">
                     <button
                       className="primary"
                       type="button"
@@ -199,33 +179,71 @@ FormikForm.propTypes = {
 };
 
 const LinkFrom = ({ heading, link, getFormValues }) => {
+  const [serverError, setServerError] = useState("");
+  const [feedback, setFeedback] = useState("");
+
+  const router = useRouter();
+
   const initialFormValues = {
     link: link,
     personalDetails: {
-      profileImage: null,
+      profileImage: "",
       name: "",
       title: "",
       backgroundColor: "#18493E",
     },
     socials: {
-      socials: [{ name: "", link: "", color: "#000000", icon: null }],
+      socials: [{ name: "", link: "" }],
       showFavicon: true,
     },
     contactForm: { toggle: false, apiEmailAddress: "", apiKey: "" },
   };
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    // const { name } = values;
+  const createLink = async (formData) => {
+    // create user
+    const response = await fetch(`/api/user/create-link`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw data || "Something went wrong";
+    }
+
+    return data;
+  };
+
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     //* form submit
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 400);
+
+    if (router.pathname === "/create") {
+      try {
+        await createLink(values);
+        setFeedback("Success");
+        setSubmitting(false);
+      } catch (error) {
+        if (error.message === "Form error") {
+          setErrors({ ...error.formErrors });
+          setSubmitting(false);
+
+          return;
+        }
+
+        setSubmitting(false);
+        setServerError(error.message);
+      }
+    }
   };
 
   return (
     <Formik
       initialValues={initialFormValues}
-      validate={validateLinkForm}
+      validationSchema={validationSchema}
       onSubmit={handleSubmit}
       enableReinitialize
     >
@@ -238,16 +256,20 @@ const LinkFrom = ({ heading, link, getFormValues }) => {
         touched,
       }) => {
         return (
-          <FormikForm
-            values={values}
-            heading={heading}
-            setFieldValue={setFieldValue}
-            setFieldTouched={setFieldTouched}
-            errors={errors}
-            touched={touched}
-            isSubmitting={isSubmitting}
-            getFormValues={getFormValues}
-          />
+          <>
+            {serverError && <p className="error">{serverError}</p>}
+            {feedback && <p className="feedback">{feedback}</p>}
+            <FormikForm
+              values={values}
+              heading={heading}
+              setFieldValue={setFieldValue}
+              setFieldTouched={setFieldTouched}
+              errors={errors}
+              touched={touched}
+              isSubmitting={isSubmitting}
+              getFormValues={getFormValues}
+            />
+          </>
         );
       }}
     </Formik>

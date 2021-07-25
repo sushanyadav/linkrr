@@ -45,10 +45,15 @@ const ImageFileInput = ({
           onChange={(event) => {
             const file = event.currentTarget.files[0];
 
-            setFieldTouched(name, true);
-
-            setFieldValue(name, file);
             if (file) {
+              const reader = new FileReader();
+
+              reader.readAsDataURL(file);
+              reader.onloadend = () => {
+                setFieldTouched(name, true);
+
+                setFieldValue(name, reader.result);
+              };
               previewFile(file);
             }
           }}
@@ -77,7 +82,7 @@ ImageFileInput.propTypes = {
   setFieldTouched: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
   error: PropTypes.string,
-  touched: PropTypes.bool,
+  touched: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 };
 
 export default ImageFileInput;
