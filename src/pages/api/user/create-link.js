@@ -6,6 +6,7 @@ import dotToNestedObject from "utils/dotToNestedObject";
 import { connectToDatabase } from "lib/db";
 
 const mail = require("@sendgrid/mail");
+const CryptoJS = require("crypto-js");
 
 const { cloudinary } = require("utils/cloudinary");
 
@@ -127,6 +128,11 @@ const handler = async (req, res) => {
 
   try {
     req.body.personalDetails.profileImage = profileImageUrl;
+    // Encrypt
+    req.body.contactForm.apiKey = CryptoJS.AES.encrypt(
+      req.body.contactForm.apiKey,
+      process.env.SEND_GRID_API_KEY_SECRET
+    ).toString();
 
     await userCollection.updateOne(
       { email: userEmail },

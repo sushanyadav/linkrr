@@ -9,6 +9,8 @@ import imageToBase64 from "utils/imageToBase64";
 
 import { connectToDatabase } from "lib/db";
 
+const CryptoJS = require("crypto-js");
+
 export default function EditPage({ errorFromServer, initialFormValues }) {
   useEffect(() => {
     if (initialFormValues) {
@@ -99,6 +101,14 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
+    const bytes = CryptoJS.AES.decrypt(
+      user.data.contactForm.apiKey,
+      process.env.SEND_GRID_API_KEY_SECRET
+    );
+    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+    user.data.contactForm.apiKey = decryptedData.toString();
+
     return {
       props: {
         initialFormValues: user.data,
