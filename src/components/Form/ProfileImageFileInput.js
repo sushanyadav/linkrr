@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import Image from "next/image";
 
@@ -8,9 +8,18 @@ const ImageFileInput = ({
   error,
   name,
   touched,
+  path,
+  value,
 }) => {
   const [previewSource, setPreviewSource] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (path === "/edit") {
+      setPreviewSource(value); // myBase64 is the base64 string
+    }
+    // eslint-disable-next-line
+  }, [path]);
 
   const previewFile = (file) => {
     setLoading(true);
@@ -75,12 +84,15 @@ const ImageFileInput = ({
 ImageFileInput.defaultProps = {
   error: undefined,
   touched: undefined,
+  value: undefined,
 };
 
 ImageFileInput.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
   setFieldTouched: PropTypes.func.isRequired,
   name: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  path: PropTypes.string.isRequired,
   error: PropTypes.string,
   touched: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
 };

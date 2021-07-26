@@ -8,7 +8,7 @@ import TextInput from "components/Form/TextInput";
 import ColorInput from "components/Form/ColorInput";
 import CheckboxInput from "components/Form/CheckboxInput";
 
-import { validationSchema } from "../../utils/validate";
+import { validationSchema } from "utils/validate";
 
 const FormikForm = ({
   heading,
@@ -19,6 +19,8 @@ const FormikForm = ({
   isSubmitting,
   values,
   getFormValues,
+  initialFormValues,
+  path,
 }) => {
   getFormValues(values);
 
@@ -43,6 +45,8 @@ const FormikForm = ({
           name="personalDetails.profileImage"
           touched={touched.personalDetails?.profileImage}
           error={errors.personalDetails?.profileImage}
+          path={path}
+          value={values.personalDetails.profileImage}
           setFieldValue={setFieldValue}
           setFieldTouched={setFieldTouched}
         />
@@ -158,7 +162,14 @@ const FormikForm = ({
           />
         </div>
       </fieldset>
-      <button type="submit" disabled={isSubmitting} className="primary">
+      <button
+        type="submit"
+        disabled={
+          isSubmitting ||
+          JSON.stringify(initialFormValues) === JSON.stringify(values)
+        }
+        className="primary"
+      >
         Submit
       </button>
     </Form>
@@ -176,28 +187,15 @@ FormikForm.propTypes = {
   setFieldValue: PropTypes.func.isRequired,
   getFormValues: PropTypes.func.isRequired,
   setFieldTouched: PropTypes.func.isRequired,
+  initialFormValues: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
-const LinkFrom = ({ heading, link, getFormValues }) => {
+const LinkFrom = ({ heading, getFormValues, initialFormValues }) => {
   const [serverError, setServerError] = useState("");
   const [feedback, setFeedback] = useState("");
 
   const router = useRouter();
-
-  const initialFormValues = {
-    link: link,
-    personalDetails: {
-      profileImage: "",
-      name: "",
-      title: "",
-      backgroundColor: "#18493E",
-    },
-    socials: {
-      socials: [{ name: "", link: "" }],
-      showFavicon: true,
-    },
-    contactForm: { toggle: false, apiEmailAddress: "", apiKey: "" },
-  };
 
   const createLink = async (formData) => {
     // create user
@@ -220,11 +218,13 @@ const LinkFrom = ({ heading, link, getFormValues }) => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     //* form submit
-
+    setServerError("");
+    setFeedback("");
     if (router.pathname === "/create") {
       try {
-        await createLink(values);
-        setFeedback("Success");
+        const response = await createLink(values);
+
+        setFeedback(response.message);
         setSubmitting(false);
       } catch (error) {
         if (error.message === "Form error") {
@@ -237,6 +237,8 @@ const LinkFrom = ({ heading, link, getFormValues }) => {
         setSubmitting(false);
         setServerError(error.message);
       }
+    } else if (router.pathname === "/edit") {
+      // console.log(values);
     }
   };
 
@@ -263,8 +265,10 @@ const LinkFrom = ({ heading, link, getFormValues }) => {
               values={values}
               heading={heading}
               setFieldValue={setFieldValue}
+              initialFormValues={initialFormValues}
               setFieldTouched={setFieldTouched}
               errors={errors}
+              path={router.pathname}
               touched={touched}
               isSubmitting={isSubmitting}
               getFormValues={getFormValues}
@@ -280,8 +284,8 @@ LinkFrom.defaultProps = {};
 
 LinkFrom.propTypes = {
   heading: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
   getFormValues: PropTypes.func.isRequired,
+  initialFormValues: PropTypes.object.isRequired,
 };
 
 export default LinkFrom;
