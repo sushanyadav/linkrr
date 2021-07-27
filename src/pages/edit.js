@@ -105,7 +105,8 @@ export async function getServerSideProps(context) {
       user.data.contactForm.apiKey,
       process.env.SEND_GRID_API_KEY_SECRET
     );
-    const decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+
+    const decryptedData = bytes.toString(CryptoJS.enc.Utf8);
 
     user.data.contactForm.apiKey = decryptedData.toString();
 

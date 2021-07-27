@@ -65,7 +65,7 @@ export const validationSchema = object().shape({
     toggle: bool(),
     apiEmailAddress: string().when("toggle", {
       is: true,
-      then: string().required("Required"),
+      then: string().required("Required").email("Valid email address"),
     }),
     apiKey: string().when("toggle", {
       is: true,

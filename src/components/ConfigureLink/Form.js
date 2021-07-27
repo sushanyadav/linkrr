@@ -197,10 +197,9 @@ const LinkFrom = ({ heading, getFormValues, initialFormValues }) => {
 
   const router = useRouter();
 
-  const createLink = async (formData) => {
-    // create user
-    const response = await fetch(`/api/user/create-link`, {
-      method: "POST",
+  const sendData = async (apiUrl, method, formData) => {
+    const response = await fetch(apiUrl, {
+      method: method,
       headers: {
         "Content-Type": "application/json",
       },
@@ -218,14 +217,20 @@ const LinkFrom = ({ heading, getFormValues, initialFormValues }) => {
 
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     //* form submit
+
     setServerError("");
     setFeedback("");
     if (router.pathname === "/create") {
       try {
-        const response = await createLink(values);
+        const response = await sendData(
+          "/api/user/create-link",
+          "POST",
+          values
+        );
 
         setFeedback(response.message);
         setSubmitting(false);
+        router.replace("/");
       } catch (error) {
         if (error.message === "Form error") {
           setErrors({ ...error.formErrors });
@@ -238,7 +243,23 @@ const LinkFrom = ({ heading, getFormValues, initialFormValues }) => {
         setServerError(error.message);
       }
     } else if (router.pathname === "/edit") {
-      // console.log(values);
+      try {
+        const response = await sendData("/api/user/edit-link", "PATCH", values);
+
+        setFeedback(response.message);
+        setSubmitting(false);
+        router.replace("/");
+      } catch (error) {
+        if (error.message === "Form error") {
+          setErrors({ ...error.formErrors });
+          setSubmitting(false);
+
+          return;
+        }
+
+        setSubmitting(false);
+        setServerError(error.message);
+      }
     }
   };
 

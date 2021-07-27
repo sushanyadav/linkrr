@@ -21,6 +21,7 @@
     "cloudinary": "^1.26.2",
     "crypto-js": "^4.1.1",
     "formik": "^2.2.9",
+    "image-to-base64": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.0.0",
     "next": "11.0.1",
