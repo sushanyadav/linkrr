@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/client";
+import { useRouter } from "next/router";
 
 const Header = () => {
   const [session] = useSession();
@@ -8,13 +9,17 @@ const Header = () => {
     signOut();
   };
 
+  const router = useRouter();
+
+  const isAuthPage = router.pathname === "/auth";
+
   return (
     <div className="header-wrapper">
       <header className="container flex flex-jc-sb flex-ai-c">
         <Link className="logo" href="/">
           <a>linkrr</a>
         </Link>
-        {session && (
+        {session && !isAuthPage && (
           <button onClick={logoutHandler} className="primary">
             Logout
           </button>

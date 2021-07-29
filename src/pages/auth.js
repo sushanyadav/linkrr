@@ -61,9 +61,9 @@ const AuthPage = () => {
       password: password,
     });
 
-    setIsSubmitting(false);
     if (result.error) {
       setError(result.error);
+      setIsSubmitting(false);
     } else {
       router.replace("/");
     }
