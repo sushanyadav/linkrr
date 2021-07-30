@@ -88,7 +88,6 @@ const handler = async (req, res) => {
   } = user.data;
 
   // decrypting to compare
-
   let compareAbleContactApiKey = user.data.contactForm.apiKey;
 
   if (reqToggle && userToggle) {
@@ -140,6 +139,28 @@ const handler = async (req, res) => {
     client.close();
 
     return;
+  }
+
+  if (user.data.link !== req.body.link) {
+    let listExists;
+
+    try {
+      listExists = await userCollection.findOne({
+        "data.link": req.body.link,
+      });
+    } catch (error) {
+      res.status(400).json({
+        message: "link checking failed!",
+      });
+    }
+
+    if (listExists) {
+      res.status(400).json({
+        message: "Link already exists!",
+      });
+
+      return;
+    }
   }
 
   //* checking if api key is valid

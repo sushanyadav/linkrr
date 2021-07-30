@@ -43,8 +43,41 @@ const handler = async (req, res) => {
     return;
   }
 
-  //* checking if api key is valid
+  //* Connecting to database
+  let client;
 
+  try {
+    client = await connectToDatabase();
+  } catch (error) {
+    res.status(400).json({
+      message: "Couldn't connect to database!",
+    });
+
+    return;
+  }
+
+  const userCollection = client.db().collection("users");
+  let listExists;
+
+  try {
+    listExists = await userCollection.findOne({
+      "data.link": req.body.link,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: "link checking failed!",
+    });
+  }
+
+  if (listExists) {
+    res.status(400).json({
+      message: "Link already exists!",
+    });
+
+    return;
+  }
+
+  //* checking if api key is valid
   const {
     contactForm: { toggle },
   } = req.body;
@@ -90,22 +123,7 @@ const handler = async (req, res) => {
     });
   }
 
-  // Connecting to database
-  let client;
-
-  try {
-    client = await connectToDatabase();
-  } catch (error) {
-    res.status(400).json({
-      message: "Couldn't connect to database!",
-    });
-
-    return;
-  }
-
-  // insert user data to database
-  const userCollection = client.db().collection("users");
-
+  //* insert user data to database
   let user;
 
   try {
@@ -129,10 +147,12 @@ const handler = async (req, res) => {
   try {
     req.body.personalDetails.profileImage = profileImageUrl;
     // Encrypt
-    req.body.contactForm.apiKey = CryptoJS.AES.encrypt(
-      req.body.contactForm.apiKey,
-      process.env.SEND_GRID_API_KEY_SECRET
-    ).toString();
+    if (toggle) {
+      req.body.contactForm.apiKey = CryptoJS.AES.encrypt(
+        req.body.contactForm.apiKey,
+        process.env.SEND_GRID_API_KEY_SECRET
+      ).toString();
+    }
 
     await userCollection.updateOne(
       { email: userEmail },
