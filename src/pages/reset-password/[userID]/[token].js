@@ -1,10 +1,13 @@
+import { Formik, Form } from "formik";
 import { ObjectId } from "mongodb";
 import { useState, useEffect } from "react";
 import jwt from "jsonwebtoken";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
-import { validatePassword } from "utils/validate";
+import TextInput from "components/Form/TextInput";
+
+import { resetPasswordValidationSchema } from "utils/validate";
 
 import { connectToDatabase } from "lib/db";
 
@@ -31,42 +34,26 @@ const changePassword = async (
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || "Something went wrong");
+    throw data || "Something went wrong";
   }
 
   return data;
 };
 
 const ResetPassword = ({ errorFromServer, payload }) => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
 
   const router = useRouter();
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
+  const submitHandler = async (values, { setSubmitting, setErrors }) => {
+    const { confirmPassword, password } = values;
+
     setError("");
     setFeedback("");
-    const isPasswordValid = validatePassword(password);
-
-    if (confirmPassword !== password) {
-      setError("Confirm password didn't match with password");
-
-      return;
-    }
-    if (!isPasswordValid) {
-      setError(
-        "Invalid password. Password must be minimum eight characters, at least one letter and one number."
-      );
-
-      return;
-    }
 
     try {
-      setIsSubmitting(true);
+      setSubmitting(true);
       const result = await changePassword(
         payload,
         password,
@@ -75,12 +62,18 @@ const ResetPassword = ({ errorFromServer, payload }) => {
       );
 
       if (result) {
-        setIsSubmitting(false);
+        setSubmitting(false);
         setFeedback("Password changed");
       }
     } catch (error) {
+      if (error.message === "Form error") {
+        setErrors({ ...error.formErrors });
+        setSubmitting(false);
+
+        return;
+      }
       setError(error.message);
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -106,49 +99,56 @@ const ResetPassword = ({ errorFromServer, payload }) => {
     );
   }
 
+  const initialFormValues = {
+    confirmPassword: "",
+    password: "",
+  };
+
   return (
     <div className="container center-vph-w-header form-content">
-      <form
+      <Formik
+        initialValues={initialFormValues}
+        validationSchema={resetPasswordValidationSchema}
         onSubmit={submitHandler}
-        style={{ maxWidth: "420px", minWidth: "320px" }}
       >
-        <fieldset>
-          <legend>Change password for {payload.email}</legend>
-          <label htmlFor="password">
-            <span>Enter your new password</span>
-            <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              id="password"
-              name="password"
-              required
-              type="password"
-            />
-          </label>
-
-          <label htmlFor="confirmPassword">
-            <span>Confirm your new password</span>
-            <input
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              id="confirmPassword"
-              name="confirmPassword"
-              required
-              type="password"
-            />
-          </label>
-          {error && <p className="error">{error}</p>}
-          {feedback && (
-            <>
-              <p className="feedback">{feedback}</p>
-              <p className="feedback">Redirecting you to log in page...</p>
-            </>
-          )}
-          <button disabled={isSubmitting} type="submit" className="primary">
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
-        </fieldset>
-      </form>
+        {({ isSubmitting }) => {
+          return (
+            <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
+              <fieldset>
+                <legend>Change password for {payload.email}</legend>
+                <TextInput
+                  label="Password"
+                  name="password"
+                  type="password"
+                  placeholder=""
+                />
+                <TextInput
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder=""
+                />
+                {error && <p className="error">{error}</p>}
+                {feedback && (
+                  <>
+                    <p className="feedback">{feedback}</p>
+                    <p className="feedback">
+                      Redirecting you to log in page...
+                    </p>
+                  </>
+                )}
+                <button
+                  disabled={isSubmitting}
+                  type="submit"
+                  className="primary"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </button>
+              </fieldset>
+            </Form>
+          );
+        }}
+      </Formik>
     </div>
   );
 };

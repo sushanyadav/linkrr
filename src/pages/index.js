@@ -63,7 +63,6 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
                   onChange={(e) => setLink(e.target.value)}
                   id="link"
                   name="link"
-                  required
                   type="text"
                 />
               </div>

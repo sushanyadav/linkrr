@@ -1,17 +1,36 @@
-import { array, bool, object, string } from "yup";
+import { array, bool, object, string, ref } from "yup";
 
-export function validateEmail(requiredEmail) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export const loginValidationSchema = object().shape({
+  email: string().required("Required").email("Invalid email address"),
+  password: string()
+    .required("No password provided.")
+    .min(8, "Password is too short - should be 8 chars minimum."),
+});
 
-  return re.test(String(requiredEmail).toLowerCase());
-}
+export const forgotPasswordValidationSchema = object().shape({
+  email: string().required("Required").email("Invalid email address"),
+});
 
-export function validatePassword(requiredPassword) {
-  const re = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+export const resetPasswordValidationSchema = object().shape({
+  password: string()
+    .required("No password provided.")
+    .min(8, "Password is too short - should be 8 chars minimum."),
+  confirmPassword: string().oneOf(
+    [ref("password"), null],
+    "Passwords must match"
+  ),
+});
 
-  return re.test(String(requiredPassword).toLowerCase());
-}
+export const signUpValidationSchema = object().shape({
+  email: string().required("Required").email("Invalid email address"),
+  password: string()
+    .required("No password provided.")
+    .min(8, "Password is too short - should be 8 chars minimum."),
+  confirmPassword: string().oneOf(
+    [ref("password"), null],
+    "Passwords must match"
+  ),
+});
 
 const SUPPORTED_FORMATS = [
   "data:image/jpg;base64",
@@ -65,7 +84,7 @@ export const validationSchema = object().shape({
     toggle: bool(),
     apiEmailAddress: string().when("toggle", {
       is: true,
-      then: string().required("Required").email("Valid email address"),
+      then: string().required("Required").email("Invalid email address"),
     }),
     apiKey: string().when("toggle", {
       is: true,

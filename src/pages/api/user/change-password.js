@@ -20,13 +20,7 @@ const handler = async (req, res) => {
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
 
-  if (!newPassword || newPassword.trim().length < 7) {
-    res.status(422).json({
-      message: "Invalid input - password should be at least 7 characters long.",
-    });
-
-    return;
-  }
+  // validate here
 
   let client;
 

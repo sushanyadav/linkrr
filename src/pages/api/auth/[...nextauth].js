@@ -1,6 +1,8 @@
 import NextAuth from "next-auth";
 import Providers from "next-auth/providers";
 
+import { loginValidationSchema } from "utils/validate";
+
 import { connectToDatabase } from "lib/db";
 import { verifyPassword } from "lib/auth";
 
@@ -10,6 +12,22 @@ export default NextAuth({
     Providers.Credentials({
       id: "login",
       async authorize(credentials) {
+        try {
+          await loginValidationSchema.validate(credentials, {
+            abortEarly: false,
+          });
+        } catch (error) {
+          let errors = {};
+
+          error.inner.forEach((e) => {
+            errors = { ...errors, [e.path]: e.message };
+          });
+
+          throw new Error(
+            "Credentials invalid. Please check your credentials and try submitting it again."
+          );
+        }
+
         let client;
 
         // Check if the user is exists

@@ -1,3 +1,5 @@
+import { resetPasswordValidationSchema } from "utils/validate";
+
 import { connectToDatabase } from "lib/db";
 import { hashPassword } from "lib/auth";
 
@@ -12,10 +14,24 @@ const handler = async (req, res) => {
   const { token } = query;
   const { email } = payload;
 
-  if (confirmNewPassword !== newPassword) {
-    res
-      .status(422)
-      .json({ message: "Confirm password didn't match with password." });
+  try {
+    await resetPasswordValidationSchema.validate(
+      { password: newPassword, confirmPassword: confirmNewPassword },
+      {
+        abortEarly: false,
+      }
+    );
+  } catch (error) {
+    let errors = {};
+
+    error.inner.forEach((e) => {
+      errors = { ...errors, [e.path]: e.message };
+    });
+
+    res.status(422).json({
+      message: "Form error",
+      formErrors: errors,
+    });
 
     return;
   }

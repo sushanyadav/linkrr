@@ -1,3 +1,5 @@
+import { forgotPasswordValidationSchema } from "utils/validate";
+
 import { connectToDatabase } from "lib/db";
 
 const mail = require("@sendgrid/mail");
@@ -11,6 +13,25 @@ const handler = async (req, res) => {
   const { email } = data;
 
   let client;
+
+  try {
+    await forgotPasswordValidationSchema.validate(req.body, {
+      abortEarly: false,
+    });
+  } catch (error) {
+    let errors = {};
+
+    error.inner.forEach((e) => {
+      errors = { ...errors, [e.path]: e.message };
+    });
+
+    res.status(422).json({
+      message: "Form error",
+      formErrors: errors,
+    });
+
+    return;
+  }
 
   try {
     client = await connectToDatabase();

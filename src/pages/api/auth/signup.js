@@ -1,4 +1,4 @@
-import { validateEmail, validatePassword } from "utils/validate";
+import { signUpValidationSchema } from "utils/validate";
 
 import { connectToDatabase } from "lib/db";
 import { hashPassword } from "lib/auth";
@@ -9,19 +9,20 @@ const handler = async (req, res) => {
 
   const { email, password } = data;
 
-  const isEmailValid = validateEmail(email);
-  const isPasswordValid = validatePassword(password);
+  try {
+    await signUpValidationSchema.validate(req.body, {
+      abortEarly: false,
+    });
+  } catch (error) {
+    let errors = {};
 
-  if (!isEmailValid) {
-    res.status(422).json({ message: "Invalid Email." });
+    error.inner.forEach((e) => {
+      errors = { ...errors, [e.path]: e.message };
+    });
 
-    return;
-  }
-
-  if (!isPasswordValid) {
     res.status(422).json({
-      message:
-        "Invalid password. Password must be minimum eight characters, at least one letter and one number.",
+      message: "Form error",
+      formErrors: errors,
     });
 
     return;
