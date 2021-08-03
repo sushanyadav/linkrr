@@ -4,6 +4,10 @@ import Footer from "./Footer";
 import Header from "./Header";
 
 const Layout = ({ children }) => {
+  if (children.type.name === "LinkPage") {
+    return children;
+  }
+
   return (
     <>
       <Header />

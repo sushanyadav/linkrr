@@ -1,13 +1,14 @@
-//Layout
 .container {
-   max-width: calc(1536px + 10rem);
-   margin: 0 auto;
-   padding: 0 1rem;
-
-   @include min-break-point(large-desktop) {
-     padding: 0 5rem;
-   }
+  &--link {
+    @extend .container;
+    max-width: 714px;
+  }
+  
+  max-width: 1536px;
+  padding: $padding-md $space-md;
+  margin: 0 auto;
 }
+
 
 .header-wrapper{
 background-color: #f5f5f5;
@@ -97,4 +98,8 @@ background-color: #f5f5f5;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+::-webkit-resizer{  	
+  visibility: hidden;
 }

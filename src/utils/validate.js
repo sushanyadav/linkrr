@@ -75,7 +75,7 @@ export const validationSchema = object().shape({
     socials: array(
       object().shape({
         name: string().required("Required"),
-        link: string().required("Required"),
+        link: string().required("Required").url("Enter correct url!"),
       })
     ),
     showFavicon: bool(),

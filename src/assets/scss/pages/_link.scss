@@ -1,0 +1,151 @@
+.link-wrapper {
+  min-height: 100vh;
+  
+  .link__main {
+    margin-bottom: $space-lg;
+  }
+
+  .link {
+  @extend .flex;
+  @extend .flex-col;
+  @extend .flex-jc-sb;
+  min-height: inherit;
+  }
+}
+
+.profile-info {
+  color: $white;
+  @extend .flex;
+  @extend .flex-col;
+  @extend .flex-ai-c;
+  margin-bottom: $space-lg;
+
+  &__image {
+  width: 4rem;
+  height: 4rem;
+  border-radius: $rounded-full;
+  border: $border-md solid $white;
+
+  img {
+    border-radius: $rounded-full;
+    }
+  }
+
+  &__name {
+    margin-top: $space-sm;
+    font-size: $font-size-lg;
+    font-weight: $font-weight-boldest;
+  }
+  &__title {
+     font-size: $font-size-sm;
+     font-weight: $font-weight-bold;
+     opacity: 56%;
+  }
+}
+
+.social-links {
+  .link-content {
+
+    &:not(:last-child) {
+      margin-bottom: $space-xs-lg;
+    }
+  }
+}
+
+.link-content {
+  @extend .flex-ai-c-jc-c;
+
+  &__icon {
+    @extend .flex-ai-c-jc-c;
+    margin-right: $space-xxs;
+  }
+
+  background-color: $white;
+  width: 100%;
+  text-align: center;
+  font-size: $font-size-md;
+  line-height: $line-height-md;
+  border-radius: $rounded-sm;
+  font-weight: $font-weight-bolder;
+  padding: $space-xs;
+  color: $dark-gray;
+  box-shadow: 0px 1px 0px #E2E2E2;
+
+  transition: transform 0.3s ease;
+
+  &:hover {
+    filter: drop-shadow(0px 7px 0px rgba(0, 0, 0, 0.28));
+    transform: rotate(1deg);
+      -webkit-font-smoothing: antialiased;
+  }
+}
+
+.send-message-wrapper {
+  position: relative;
+
+  .message-label {
+    font-weight: $font-weight-bolder;
+    font-size: $font-size-sm;
+    line-height: $line-height-md;
+    color: $white;
+    margin-bottom: $space-md-xs;
+    transition: all 0.5s ease;
+    visibility: hidden;
+    opacity: 0;
+
+    &--has-message {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  button {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    width: 92%;
+    border-radius: $rounded-xs;
+    padding: $space-xs;
+    transform: translate(-50%, -50%);
+    background-color: $white;
+    color: black;
+    font-weight: $font-weight-bolder;
+    transition: all 0.5s ease;
+    
+    &.--has-link {
+      background-color: black;
+      color: $white;
+      bottom: 10px;
+    }
+
+    span {
+      margin-left: 12px;
+    }
+  }
+
+
+  .send-message {
+    width: 100%;
+    resize: none;
+    border-radius: $rounded-sm;
+    border: 4px solid;
+    padding: $space-md;
+    padding-top: $space-xs;
+    padding-bottom: 4rem;
+    overflow: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease;
+    height: 80px;
+
+    &.has-message {
+      visibility: visible;
+      opacity: 1;
+      height: 250px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
