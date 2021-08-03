@@ -4,6 +4,7 @@ import { signIn, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
 
+import Layout from "components/Layout";
 import TextInput from "components/Form/TextInput";
 
 import { loginValidationSchema, signUpValidationSchema } from "utils/validate";
@@ -112,92 +113,94 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="container center-vph-w-header">
-      <div className="form-content login-content">
-        <Formik
-          initialValues={initialFormValues}
-          validationSchema={
-            isLogin ? loginValidationSchema : signUpValidationSchema
-          }
-          onSubmit={submitHandler}
-        >
-          {({ resetForm, setErrors }) => {
-            return (
-              <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
-                <fieldset>
-                  <legend>
-                    {isLogin ? "Login in to" : "Sign up for"} an account
-                  </legend>
-                  <TextInput
-                    label="Email"
-                    name="email"
-                    type="text"
-                    placeholder=""
-                  />
-                  <TextInput
-                    label="Password"
-                    name="password"
-                    type="password"
-                    placeholder=""
-                  />
-
-                  {isLogin && (
-                    <div>
-                      <Link href="/forgot-password">
-                        <a>
-                          <small style={{ fontSize: "0.8rem" }}>
-                            Forgot password
-                          </small>
-                        </a>
-                      </Link>
-                    </div>
-                  )}
-
-                  {!isLogin && (
+    <Layout>
+      <div className="container center-vph-w-header">
+        <div className="form-content login-content">
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={
+              isLogin ? loginValidationSchema : signUpValidationSchema
+            }
+            onSubmit={submitHandler}
+          >
+            {({ resetForm, setErrors }) => {
+              return (
+                <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
+                  <fieldset>
+                    <legend>
+                      {isLogin ? "Login in to" : "Sign up for"} an account
+                    </legend>
                     <TextInput
-                      label="Confirm Password"
-                      name="confirmPassword"
+                      label="Email"
+                      name="email"
+                      type="text"
+                      placeholder=""
+                    />
+                    <TextInput
+                      label="Password"
+                      name="password"
                       type="password"
                       placeholder=""
                     />
-                  )}
-                  {error && <p className="error">{error}</p>}
+
+                    {isLogin && (
+                      <div>
+                        <Link href="/forgot-password">
+                          <a>
+                            <small style={{ fontSize: "0.8rem" }}>
+                              Forgot password
+                            </small>
+                          </a>
+                        </Link>
+                      </div>
+                    )}
+
+                    {!isLogin && (
+                      <TextInput
+                        label="Confirm Password"
+                        name="confirmPassword"
+                        type="password"
+                        placeholder=""
+                      />
+                    )}
+                    {error && <p className="error">{error}</p>}
+                    <button
+                      disabled={isSubmitting}
+                      type="submit"
+                      className="primary"
+                    >
+                      {isSubmitting ? "Submitting" : "Submit"}
+                    </button>
+                  </fieldset>
+                  <hr className="separator" />
+                  <span className="or" style={{ display: "block" }}>
+                    OR
+                  </span>
                   <button
-                    disabled={isSubmitting}
-                    type="submit"
                     className="primary"
+                    style={{ display: "block" }}
+                    type="button"
+                    onClick={loginWithGoogle}
                   >
-                    {isSubmitting ? "Submitting" : "Submit"}
+                    {isLogin ? "Login in" : "Sign up"} using google
                   </button>
-                </fieldset>
-                <hr className="separator" />
-                <span className="or" style={{ display: "block" }}>
-                  OR
-                </span>
-                <button
-                  className="primary"
-                  style={{ display: "block" }}
-                  type="button"
-                  onClick={loginWithGoogle}
-                >
-                  {isLogin ? "Login in" : "Sign up"} using google
-                </button>
-                <button
-                  style={{ display: "block" }}
-                  type="button"
-                  className="auth-switcher"
-                  onClick={() => switchAuthModeHandler(resetForm, setErrors)}
-                >
-                  {isLogin
-                    ? "No account yet? Register"
-                    : "Already have an account! Login"}
-                </button>
-              </Form>
-            );
-          }}
-        </Formik>
+                  <button
+                    style={{ display: "block" }}
+                    type="button"
+                    className="auth-switcher"
+                    onClick={() => switchAuthModeHandler(resetForm, setErrors)}
+                  >
+                    {isLogin
+                      ? "No account yet? Register"
+                      : "Already have an account! Login"}
+                  </button>
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

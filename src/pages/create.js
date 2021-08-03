@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 import ConfigureLink from "components/ConfigureLink";
+import Layout from "components/Layout";
 
 import { connectToDatabase } from "lib/db";
 
@@ -24,16 +25,18 @@ export default function CreatePage({ errorFromServer }) {
 
   if (errorFromServer) {
     return (
-      <div className="container center-vph-w-header">
-        {errorFromServer === "link_exists" ? (
-          <p>
-            You have already created the link. Visit <Link href="/">here</Link>{" "}
-            to edit.
-          </p>
-        ) : (
-          <h1>{errorFromServer}</h1>
-        )}
-      </div>
+      <Layout>
+        <div className="container center-vph-w-header">
+          {errorFromServer === "link_exists" ? (
+            <p>
+              You have already created the link. Visit{" "}
+              <Link href="/">here</Link> to edit.
+            </p>
+          ) : (
+            <h1>{errorFromServer}</h1>
+          )}
+        </div>
+      </Layout>
     );
   }
 
@@ -53,9 +56,11 @@ export default function CreatePage({ errorFromServer }) {
   };
 
   return (
-    <section className="container">
-      <ConfigureLink heading="Create" initialFormValues={initialFormValues} />
-    </section>
+    <Layout>
+      <section className="container">
+        <ConfigureLink heading="Create" initialFormValues={initialFormValues} />
+      </section>
+    </Layout>
   );
 }
 

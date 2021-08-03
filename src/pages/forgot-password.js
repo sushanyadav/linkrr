@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getSession } from "next-auth/client";
 
 import TextInput from "components/Form/TextInput";
+import Layout from "components/Layout";
 
 import { forgotPasswordValidationSchema } from "utils/validate";
 
@@ -62,38 +63,40 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="container center-vph-w-header form-content">
-      <Formik
-        initialValues={initialFormValues}
-        validationSchema={forgotPasswordValidationSchema}
-        onSubmit={submitHandler}
-      >
-        {({ isSubmitting }) => {
-          return (
-            <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
-              <fieldset>
-                <legend>Forget password</legend>
-                <TextInput
-                  label="Email"
-                  name="email"
-                  type="text"
-                  placeholder=""
-                />
-                {error && <p className="error">{error}</p>}
-                {feedback && <p className="feedback">{feedback}</p>}
-                <button
-                  disabled={isSubmitting}
-                  type="submit"
-                  className="primary"
-                >
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </button>
-              </fieldset>
-            </Form>
-          );
-        }}
-      </Formik>
-    </div>
+    <Layout>
+      <div className="container center-vph-w-header form-content">
+        <Formik
+          initialValues={initialFormValues}
+          validationSchema={forgotPasswordValidationSchema}
+          onSubmit={submitHandler}
+        >
+          {({ isSubmitting }) => {
+            return (
+              <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
+                <fieldset>
+                  <legend>Forget password</legend>
+                  <TextInput
+                    label="Email"
+                    name="email"
+                    type="text"
+                    placeholder=""
+                  />
+                  {error && <p className="error">{error}</p>}
+                  {feedback && <p className="feedback">{feedback}</p>}
+                  <button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="primary"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit"}
+                  </button>
+                </fieldset>
+              </Form>
+            );
+          }}
+        </Formik>
+      </div>
+    </Layout>
   );
 };
 

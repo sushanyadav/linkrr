@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 
 import ConfigureLink from "components/ConfigureLink";
+import Layout from "components/Layout";
 
 import imageToBase64 from "utils/imageToBase64";
 
@@ -25,23 +26,27 @@ export default function EditPage({ errorFromServer, initialFormValues }) {
 
   if (errorFromServer) {
     return (
-      <div className="container center-vph-w-header">
-        {errorFromServer === "link_don't_exists" ? (
-          <p>
-            You haven&apos;t created the link yet. Visit{" "}
-            <Link href="/create">here</Link> to create your link.
-          </p>
-        ) : (
-          <h1>{errorFromServer}</h1>
-        )}
-      </div>
+      <Layout>
+        <div className="container center-vph-w-header">
+          {errorFromServer === "link_don't_exists" ? (
+            <p>
+              You haven&apos;t created the link yet. Visit{" "}
+              <Link href="/create">here</Link> to create your link.
+            </p>
+          ) : (
+            <h1>{errorFromServer}</h1>
+          )}
+        </div>
+      </Layout>
     );
   }
 
   return (
-    <section className="container">
-      <ConfigureLink heading="Edit" initialFormValues={initialFormValues} />
-    </section>
+    <Layout>
+      <section className="container">
+        <ConfigureLink heading="Edit" initialFormValues={initialFormValues} />
+      </section>
+    </Layout>
   );
 }
 

@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 
+import Layout from "components/Layout";
+
 import { connectToDatabase } from "lib/db";
 
 export default function HomePage({ session, errorFromServer, hasLink, data }) {
@@ -13,9 +15,11 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
 
   if (errorFromServer) {
     return (
-      <div className="container center-vph-w-header">
-        <h1>{errorFromServer}</h1>
-      </div>
+      <Layout>
+        <div className="container center-vph-w-header">
+          <h1>{errorFromServer}</h1>
+        </div>
+      </Layout>
     );
   }
 
@@ -40,41 +44,43 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
   };
 
   return (
-    <main className="container center-vph-w-header flex flex-col">
-      <h1 className="main-text">
-        Logged in from <strong>{session.user.email}</strong>
-      </h1>
-      {hasLink ? (
-        <>
-          <h2>Your link</h2>
-          <p>domain.com/{data.link}</p>
-          <button onClick={goToEditPage}>Edit link</button>
-        </>
-      ) : (
-        <form className="form-content" onSubmit={submitHandler}>
-          <fieldset>
-            <legend>Lets create a link</legend>
-            <label htmlFor="link">
-              <span className="sr-only">Link</span>
-              <div className="input-wrapper">
-                <span className="">domain.com/</span>
-                <input
-                  value={link}
-                  onChange={(e) => setLink(e.target.value)}
-                  id="link"
-                  name="link"
-                  type="text"
-                />
-              </div>
-            </label>
-            {error && <p className="error">{error}</p>}
-            <button type="submit" className="primary mt-2">
-              Create
-            </button>
-          </fieldset>
-        </form>
-      )}
-    </main>
+    <Layout>
+      <main className="container center-vph-w-header flex flex-col">
+        <h1 className="main-text">
+          Logged in from <strong>{session.user.email}</strong>
+        </h1>
+        {hasLink ? (
+          <>
+            <h2>Your link</h2>
+            <p>domain.com/{data.link}</p>
+            <button onClick={goToEditPage}>Edit link</button>
+          </>
+        ) : (
+          <form className="form-content" onSubmit={submitHandler}>
+            <fieldset>
+              <legend>Lets create a link</legend>
+              <label htmlFor="link">
+                <span className="sr-only">Link</span>
+                <div className="input-wrapper">
+                  <span className="">domain.com/</span>
+                  <input
+                    value={link}
+                    onChange={(e) => setLink(e.target.value)}
+                    id="link"
+                    name="link"
+                    type="text"
+                  />
+                </div>
+              </label>
+              {error && <p className="error">{error}</p>}
+              <button type="submit" className="primary mt-2">
+                Create
+              </button>
+            </fieldset>
+          </form>
+        )}
+      </main>
+    </Layout>
   );
 }
 

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 
 import TextInput from "components/Form/TextInput";
+import Layout from "components/Layout";
 
 import { resetPasswordValidationSchema } from "utils/validate";
 
@@ -93,9 +94,11 @@ const ResetPassword = ({ errorFromServer, payload }) => {
 
   if (!payload || errorFromServer) {
     return (
-      <div className="container center-vph-w-header">
-        <h1>{errorFromServer.toUpperCase()}</h1>
-      </div>
+      <Layout>
+        <div className="container center-vph-w-header">
+          <h1>{errorFromServer.toUpperCase()}</h1>
+        </div>
+      </Layout>
     );
   }
 
@@ -105,51 +108,53 @@ const ResetPassword = ({ errorFromServer, payload }) => {
   };
 
   return (
-    <div className="container center-vph-w-header form-content">
-      <Formik
-        initialValues={initialFormValues}
-        validationSchema={resetPasswordValidationSchema}
-        onSubmit={submitHandler}
-      >
-        {({ isSubmitting }) => {
-          return (
-            <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
-              <fieldset>
-                <legend>Change password for {payload.email}</legend>
-                <TextInput
-                  label="Password"
-                  name="password"
-                  type="password"
-                  placeholder=""
-                />
-                <TextInput
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder=""
-                />
-                {error && <p className="error">{error}</p>}
-                {feedback && (
-                  <>
-                    <p className="feedback">{feedback}</p>
-                    <p className="feedback">
-                      Redirecting you to log in page...
-                    </p>
-                  </>
-                )}
-                <button
-                  disabled={isSubmitting}
-                  type="submit"
-                  className="primary"
-                >
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </button>
-              </fieldset>
-            </Form>
-          );
-        }}
-      </Formik>
-    </div>
+    <Layout>
+      <div className="container center-vph-w-header form-content">
+        <Formik
+          initialValues={initialFormValues}
+          validationSchema={resetPasswordValidationSchema}
+          onSubmit={submitHandler}
+        >
+          {({ isSubmitting }) => {
+            return (
+              <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
+                <fieldset>
+                  <legend>Change password for {payload.email}</legend>
+                  <TextInput
+                    label="Password"
+                    name="password"
+                    type="password"
+                    placeholder=""
+                  />
+                  <TextInput
+                    label="Confirm Password"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder=""
+                  />
+                  {error && <p className="error">{error}</p>}
+                  {feedback && (
+                    <>
+                      <p className="feedback">{feedback}</p>
+                      <p className="feedback">
+                        Redirecting you to log in page...
+                      </p>
+                    </>
+                  )}
+                  <button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className="primary"
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit"}
+                  </button>
+                </fieldset>
+              </Form>
+            );
+          }}
+        </Formik>
+      </div>
+    </Layout>
   );
 };
 
