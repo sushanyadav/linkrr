@@ -1,6 +1,9 @@
 .link-wrapper {
-  min-height: 100vh;
-  
+  height: 100%;
+  min-width: 375px;
+  &.full-height {
+    height: 100vh;
+  }
   .link__main {
     margin-bottom: $space-lg;
   }
@@ -9,7 +12,7 @@
   @extend .flex;
   @extend .flex-col;
   @extend .flex-jc-sb;
-  min-height: inherit;
+  min-height: 100%;
   }
 }
 
@@ -27,6 +30,8 @@
   border: $border-md solid $white;
 
   img {
+    object-fit: cover;
+    object-position: center;
     border-radius: $rounded-full;
     }
   }

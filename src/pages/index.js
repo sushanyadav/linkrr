@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
@@ -10,8 +10,19 @@ import { connectToDatabase } from "lib/db";
 export default function HomePage({ session, errorFromServer, hasLink, data }) {
   const [link, setLink] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
+  const { error: errorFromProvider, link: linkFromServer } = router.query;
+
+  useEffect(() => {
+    if (errorFromProvider) {
+      setError(errorFromProvider);
+      setLink(linkFromServer);
+      setIsSubmitting(false);
+      window.history.replaceState(null, "", router.pathname);
+    }
+  }, [errorFromProvider, linkFromServer, router]);
 
   if (errorFromServer) {
     return (
@@ -24,13 +35,14 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
   }
 
   const submitHandler = (e) => {
+    setError("");
     e.preventDefault();
     if (!link || link.trim() === "") {
       setError("Required");
 
       return;
     }
-
+    setIsSubmitting(true);
     router.push({
       pathname: "/create",
       query: { link: link.trim() },
@@ -73,8 +85,12 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
                 </div>
               </label>
               {error && <p className="error">{error}</p>}
-              <button type="submit" className="primary mt-2">
-                Create
+              <button
+                disabled={isSubmitting}
+                type="submit"
+                className="primary mt-2"
+              >
+                {isSubmitting ? "Creating..." : "Create"}
               </button>
             </fieldset>
           </form>

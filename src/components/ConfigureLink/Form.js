@@ -1,7 +1,7 @@
 import { Formik, Form, FieldArray } from "formik";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import ImageFileInput from "components/Form/ProfileImageFileInput";
 import TextInput from "components/Form/TextInput";
@@ -19,10 +19,17 @@ const FormikForm = ({
   isSubmitting,
   values,
   getFormValues,
+  getFormErrors,
   initialFormValues,
   path,
 }) => {
-  getFormValues(values);
+  useEffect(() => {
+    getFormValues(values);
+  }, [getFormValues, values]);
+
+  useEffect(() => {
+    getFormErrors(errors);
+  }, [getFormErrors, errors]);
 
   if (!values.contactForm.toggle) {
     values.contactForm.apiEmailAddress = "";
@@ -186,12 +193,18 @@ FormikForm.propTypes = {
   isSubmitting: PropTypes.bool.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   getFormValues: PropTypes.func.isRequired,
+  getFormErrors: PropTypes.func.isRequired,
   setFieldTouched: PropTypes.func.isRequired,
   initialFormValues: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
 };
 
-const LinkFrom = ({ heading, getFormValues, initialFormValues }) => {
+const LinkFrom = ({
+  heading,
+  getFormValues,
+  getFormErrors,
+  initialFormValues,
+}) => {
   const [serverError, setServerError] = useState("");
   const [feedback, setFeedback] = useState("");
 
@@ -293,6 +306,7 @@ const LinkFrom = ({ heading, getFormValues, initialFormValues }) => {
               touched={touched}
               isSubmitting={isSubmitting}
               getFormValues={getFormValues}
+              getFormErrors={getFormErrors}
             />
           </>
         );
@@ -306,6 +320,7 @@ LinkFrom.defaultProps = {};
 LinkFrom.propTypes = {
   heading: PropTypes.string.isRequired,
   getFormValues: PropTypes.func.isRequired,
+  getFormErrors: PropTypes.func.isRequired,
   initialFormValues: PropTypes.object.isRequired,
 };
 

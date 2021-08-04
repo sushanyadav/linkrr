@@ -1,11 +1,18 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 
 import Form from "./Form";
 import Preview from "./Preview";
 
 const ConfigureLink = ({ heading, initialFormValues }) => {
+  const [data, setData] = useState(initialFormValues);
+  const [errors, setErrors] = useState({});
+
   const getFormValues = (values) => {
-    // console.log(values, "values");
+    setData(values);
+  };
+  const getFormErrors = (errors) => {
+    setErrors(errors);
   };
 
   return (
@@ -15,9 +22,10 @@ const ConfigureLink = ({ heading, initialFormValues }) => {
           heading={heading}
           initialFormValues={initialFormValues}
           getFormValues={getFormValues}
+          getFormErrors={getFormErrors}
         />
       </div>
-      <Preview />
+      <Preview errors={errors} data={data} />
     </div>
   );
 };

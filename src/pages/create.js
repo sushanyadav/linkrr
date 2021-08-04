@@ -46,7 +46,7 @@ export default function CreatePage({ errorFromServer }) {
       profileImage: "",
       name: "",
       title: "",
-      backgroundColor: "#18493E",
+      backgroundColor: "#7C3AED",
     },
     socials: {
       socials: [{ name: "", link: "" }],
@@ -77,6 +77,8 @@ CreatePage.propTypes = {
 export async function getServerSideProps(context) {
   const session = await getSession({ req: context.req });
 
+  const { link } = context.query;
+
   if (!session) {
     return {
       redirect: { destination: "/auth", permanent: false },
@@ -96,6 +98,32 @@ export async function getServerSideProps(context) {
   }
 
   const userCollection = client.db().collection("users");
+
+  if (link) {
+    let hasLink;
+
+    try {
+      hasLink = await userCollection.findOne({
+        "data.link": link,
+      });
+    } catch (err) {
+      return {
+        props: {
+          errorFromServer:
+            "Couldn't do search link operation ! Please try again later.",
+        },
+      };
+    }
+
+    if (hasLink) {
+      return {
+        // redirect with query params
+        redirect: {
+          destination: `/?link=${link}&error=link already exists`,
+        },
+      };
+    }
+  }
 
   let user;
 

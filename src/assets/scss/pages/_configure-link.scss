@@ -1,9 +1,10 @@
 .link-section-wrapper {
-  margin: 2rem 0;
   display: flex;
+  min-height: calc(100vh - 4rem); // deducting the height of header
 
   .form-section {
-    flex-basis: 60%;
+    padding: $padding-md 0;
+    flex-grow: 1;
     margin-right: 2rem;
 
   }
@@ -14,12 +15,15 @@
 
 
   .preview-section {
-    background-color: black;
-    flex-basis: 40%;
+    background-color: $cool-gray;
+    padding: 4rem;
+    height: inherit;
   }
 }
 
 .preview-image {
+  object-fit: cover;
+  object-position: center;
   border-radius: 100%;
 }
 
