@@ -88,56 +88,80 @@ const FormikForm = ({
       <fieldset>
         <FieldArray
           name="socials.socials"
-          render={({ remove, push }) => (
-            <>
-              <div className="flex flex-ai-c flex-jc-sb mb-2">
-                <legend className="legend-without-margin">Social Links</legend>
-                <button
-                  type="button"
-                  className="primary"
-                  onClick={() =>
-                    push({ name: "", link: "", color: "#000000", icon: null })
-                  }
-                >
-                  Add more
-                </button>
-              </div>
-              {values.socials.socials.map((social, index) => (
-                <div key={index} className="flex ">
-                  <div className="input-wrapper">
-                    <TextInput
-                      label="Name"
-                      name={`socials.socials[${index}].name`}
-                      type="text"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="input-wrapper ml-1">
-                    <TextInput
-                      label="Link"
-                      name={`socials.socials[${index}].link`}
-                      type="text"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="flex ml-1 flex-ai-c flex-jc-e">
-                    <button
-                      className="primary"
-                      type="button"
-                      disabled={values.socials.socials.length <= 1}
-                      onClick={() => remove(index)}
-                    >
-                      Delete
-                    </button>
-                  </div>
+          render={({ remove, push }) => {
+            const disableAddMoreBtn =
+              values.socials.socials[
+                values.socials.socials.length - 1
+              ].name.trim() === "" ||
+              values.socials.socials[
+                values.socials.socials.length - 1
+              ].link.trim() === "";
+
+            const onAddMoreBtnClick = () => {
+              if (disableAddMoreBtn) {
+                setFieldTouched(
+                  `socials.socials[${values.socials.socials.length - 1}].name`,
+                  true
+                );
+                setFieldTouched(
+                  `socials.socials[${values.socials.socials.length - 1}].link`,
+                  true
+                );
+
+                return;
+              }
+              push({ name: "", link: "" });
+            };
+
+            return (
+              <>
+                <div className="flex flex-ai-c flex-jc-sb mb-2">
+                  <legend className="legend-without-margin">
+                    Social Links
+                  </legend>
+                  <button
+                    type="button"
+                    className="primary"
+                    // disabled={disableAddMoreBtn}
+                    onClick={onAddMoreBtnClick}
+                  >
+                    Add more
+                  </button>
                 </div>
-              ))}
-            </>
-          )}
+                {values.socials.socials.map((social, index) => (
+                  <div key={index} className="flex ">
+                    <div className="input-wrapper">
+                      <TextInput
+                        label="Name"
+                        name={`socials.socials[${index}].name`}
+                        type="text"
+                        placeholder=""
+                      />
+                    </div>
+                    <div className="input-wrapper ml-1">
+                      <TextInput
+                        label="Link"
+                        name={`socials.socials[${index}].link`}
+                        type="text"
+                        placeholder=""
+                      />
+                    </div>
+                    <div className="flex ml-1 flex-ai-c flex-jc-e">
+                      <button
+                        className="primary"
+                        type="button"
+                        disabled={values.socials.socials.length <= 1}
+                        onClick={() => remove(index)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </>
+            );
+          }}
         />
-        {errors.socials && typeof errors.socials === "string" && (
-          <p className="error">{errors.socials}</p>
-        )}
         <CheckboxInput
           label="Show favicon"
           labelAdditionalClassName="label-horizontal"
@@ -286,6 +310,7 @@ const LinkFrom = ({
       {({
         setFieldValue,
         setFieldTouched,
+        setFieldError,
         errors,
         isSubmitting,
         values,

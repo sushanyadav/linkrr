@@ -8,6 +8,7 @@ import githubFavicon from "assets/images/github-favicon.ico";
 
 const Link = ({
   wrapperClassName,
+  contentClassName,
   sendMessageHandler,
   data,
   errors,
@@ -70,7 +71,7 @@ const Link = ({
       style={{ backgroundColor: personalDetails.backgroundColor }}
     >
       <div
-        className="link container--link"
+        className={`${contentClassName} link container--link`}
         style={{ borderColor: personalDetails.backgroundColor }}
       >
         <div className="link__main">
@@ -106,7 +107,7 @@ const Link = ({
                   target="_blank"
                   href={social.link}
                   rel="noreferrer"
-                  key={social.link}
+                  key={index}
                   className="link-content"
                 >
                   {social.link && showFavicon && (
@@ -164,6 +165,7 @@ const Link = ({
 
 Link.defaultProps = {
   wrapperClassName: "",
+  contentClassName: "",
   message: "",
   setMessage: () => {},
   sendMessageHandler: () => {},
@@ -174,6 +176,7 @@ Link.propTypes = {
   sendMessageHandler: PropTypes.func,
   message: PropTypes.string,
   wrapperClassName: PropTypes.string,
+  contentClassName: PropTypes.string,
   setMessage: PropTypes.func,
   data: PropTypes.object.isRequired,
   errors: PropTypes.object,

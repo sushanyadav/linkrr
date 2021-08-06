@@ -27,6 +27,7 @@ const LinkPage = ({ data, errorFromServer }) => {
       message={message}
       setMessage={setMessage}
       wrapperClassName="full-height"
+      contentClassName="full-height"
     />
   );
 };
