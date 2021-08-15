@@ -1,27 +1,75 @@
+// container
 .container {
   &--link {
     @extend .container;
     max-width: 714px;
-    padding: $padding-md $space-md;
+    padding: $space-xl $space-md;
   }
   
   max-width: 1536px;
   padding: 0 $space-md;
-  padding-right: 0;
   margin: 0 auto;
 }
 
+//separator
+.divider {
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 24px;
+  color: $white;
+  margin: $space-md 0;
 
-.header-wrapper{
-  background-color: darken($color: #fff, $amount: 2);
-  padding-right: $space-md;
-  
-  header {
-    height: 4rem;
+  &:before,
+  &:after {
+		border: 1px solid $separator-color;
+    content: "";
+    flex: 1;
   }
-  .logo {
-    font-weight: 600;
+
+  &:before {
+    margin-right: 1rem;
+   }
+
+  &:after {
+    margin-left: 1rem;
+   }
+}
+
+// background-gradient
+.bg-gradient {
+  background: linear-gradient(180deg, $violet 0%, $violet-light 100%);
+}
+
+// Buttons
+.btn {
+  display: flex;
+  text-align: center;
+  width: 100%;
+  padding: $space-lg;
+  border: 1px solid $light-black;
+  border-radius: $rounded-sm;
+  font-size: $font-size-md;
+  font-weight: $font-weight-boldest;
+  line-height: $line-height-md;
+
+  &--primary {
+  background-color: $black;
+  box-shadow: $box-shadow;
+  align-items: center;
+  justify-content: center;
+  transition: background-color, color .3s ease;
+  &:hover {
+    background-color: $accent;
+    color: $black;
   }
+
+  span { 
+    height: 16px; // height of the icon
+    margin-left: $space-xs;
+  }
+}
 }
 
 // Flexbox
@@ -76,22 +124,20 @@
   @extend .flex-ai-c-jc-c;
 }
 
-.form-content{
-  @extend .flex-ai-c-jc-c;
-  @extend .flex-col;
-}
-
+// errors and feedback messages
 .error {
   color: #a94442;
   font-size: 12px;
   font-weight: bold;
 }
+
 .feedback {
   color: #3b5998;
   font-size: 12px;
   font-weight: bold;
 }
 
+// screen reader only
 .sr-only {
   position: absolute;
   width: 1px;
@@ -104,6 +150,151 @@
   border-width: 0;
 }
 
-::-webkit-resizer{  	
-  visibility: hidden;
+// utilities
+.ml-2 {
+  margin-left: 1.5rem;
+}
+
+.mr-2 {
+  margin-right: 1.5rem;
+}
+
+.mt-2 {
+  margin-top: 1.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 1.5rem;
+}
+
+.ml-1 {
+  margin-left: 0.5rem;
+}
+
+.mr-1 {
+  margin-right: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.5rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.5rem;
+}
+
+// horizontal labels
+.label-horizontal {
+  @extend label;
+  @extend .flex-row;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+//* Form 
+// input wrapper
+.input-wrapper {
+  flex: 1;
+}
+
+.form__head {
+  text-align: center;
+  color: $white;
+  font-size: $font-size-xlg;
+  line-height: $line-height-lg;
+  margin-bottom: $space-md;
+}
+
+.form-group {
+  position: relative;  
+}
+
+.form-label {
+  position: absolute;
+  left: 22px;
+  cursor: text;
+  transform: translateY(50%);
+  top: 10px;
+  color: #9CA3AF;
+  z-index: 10;
+  transition: transform 150ms ease-out;
+}
+
+.focused .form-label {
+  transform: translateY(-30%);
+  color: #111827;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+
+  .notification-wrapper {
+    position: absolute;
+    top: 23px;
+    right: 22px;
+    cursor: pointer;
+  }
+
+  .notification-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    border-radius: $rounded-full;
+    position: relative;
+
+    &.error {
+      background-color: #FA1616;
+      color: $white;
+    }
+    &.success {
+      background-color: #36DD51;
+      color: $white;
+    }
+  }
+
+  
+.notification-icon::before,
+.notification-icon::after {
+  --scale: 0;
+  --arrow-size: 10px;
+  --tooltip-color: #FA1616;
+
+  position: absolute;
+  top: -.25rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(var(--translate-y, 0)) scale(var(--scale));
+  transition: 150ms transform;
+  transform-origin: bottom center;
+}
+
+.notification-icon::before {
+  --translate-y: calc(-100% - var(--arrow-size));
+
+  content: attr(data-error);
+  color: white;
+  padding: .5rem;
+  border-radius: .3rem;
+  text-align: center;
+  width: max-content;
+  max-width: 24rem;
+  background: var(--tooltip-color);
+}
+
+//SHOWING TOOLTIP
+.show-tooltip.notification-icon::before,
+.show-tooltip.notification-icon::after {
+  --scale: 1;
+}
+
+.notification-icon::after {
+  --translate-y: calc(-1 * var(--arrow-size));
+
+  content: '';
+  border: var(--arrow-size) solid transparent;
+  border-top-color: var(--tooltip-color);
+  transform-origin: top center;
 }

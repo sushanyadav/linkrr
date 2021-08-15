@@ -57,7 +57,7 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
 
   return (
     <Layout>
-      <main className="container center-vph-w-header flex flex-col">
+      <main className="container center-vph flex flex-col">
         <h1 className="main-text">
           Logged in from <strong>{session.user.email}</strong>
         </h1>
@@ -68,7 +68,7 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
             <button onClick={goToEditPage}>Edit link</button>
           </>
         ) : (
-          <form className="form-content" onSubmit={submitHandler}>
+          <form className="" onSubmit={submitHandler}>
             <fieldset>
               <legend>Lets create a link</legend>
               <label htmlFor="link">

@@ -17,41 +17,15 @@ img {
   max-width: 100%;
 }
 
-//separator
-.separator {
-  width: 100%;
-  border-top: 1px solid #eee;
-}
-
-// Buttons
-button {
-  display: inline-block;
-  border: 0;
-  cursor: pointer;
-  font-weight: 500;
-  background-color: transparent;
-  color: black;
-  font-family: 'Nunito', sans-serif;
-
-  &:focus {
-    outline: 0;
-  }
-}
-
-textarea {
-  font-family: 'Nunito', sans-serif;
-  font-weight: $font-weight-bolder;
-  font-size: $font-size-sm;
-  line-height: $line-height-md;
-}
-
 a {
-  text-decoration: none;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 24px;
   cursor: pointer;
-  color: black;
+  color: white;
 
   &:hover {
-    text-decoration: none;
+    
     outline-width: 0;
   }
 
@@ -81,7 +55,7 @@ legend {
 
 fieldset {
   *:not(:first-child) {
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.25rem;
   }
 
   *:last-child {
@@ -99,62 +73,24 @@ font-size: 1rem;
  }
 }
 
-.label-horizontal {
-  @extend label;
-  @extend .flex-row;
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
-
-
 input[type="text"],
 input[type="password"],
 input[type="email"] {
-  border: 0;
-  background-color: #eee;
-  height: 2rem;
-  padding: 0rem 0.4rem;
+  border: 2px solid $black;
+  width: 100%;
+  border-radius: 16px;
+  background-color: $white;
+  padding: 12px 20px;
   font-family: 'Inter', sans-serif;
+  box-shadow: 0px 7px 0px $black;
+  height: 64px;
+  line-height: 24px;
+  font-size: 16px;
+  
   &:focus { 
-    outline: none;
+  outline: none;
+  box-shadow: 0px 7px 0px $accent;
   }
-}
-
-.input-wrapper {
-  flex: 1;
-}
-
-.ml-2 {
-  margin-left: 1.5rem;
-}
-
-.mr-2 {
-  margin-right: 1.5rem;
-}
-
-.mt-2 {
-  margin-top: 1.5rem;
-}
-
-.mb-2 {
-  margin-bottom: 1.5rem;
-}
-
-.ml-1 {
-  margin-left: 0.5rem;
-}
-
-.mr-1 {
-  margin-right: 0.5rem;
-}
-
-.mt-1 {
-  margin-top: 0.5rem;
-}
-
-.mb-1 {
-  margin-bottom: 0.5rem;
 }
 
 ::-webkit-scrollbar {
@@ -175,4 +111,9 @@ input[type="email"] {
   background: rgba(0,0,0,0.2); 
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2); 
   box-shadow: inset 0 0 6px rgba(0,0,0,0.2); 
+}
+
+// resize icon in textarea
+::-webkit-resizer{  	
+  visibility: hidden;
 }

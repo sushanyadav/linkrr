@@ -7,27 +7,29 @@
   }
 
   .link__main {
-    margin-bottom: $space-lg;
+    margin-bottom: $space-xl;
   }
 
   .link {
-  @extend .flex;
-  @extend .flex-col;
-  @extend .flex-jc-sb;
-  min-height: 100%;
+    min-height: 100%;
+
+    @extend .flex;
+    @extend .flex-col;
+    @extend .flex-jc-sb;
   
-  &.full-height {
-    min-height: 100vh;  
+    &.full-height {
+      min-height: 100vh;  
     }
   }
 }
 
 .profile-info {
   color: $white;
+  margin-bottom: $space-xl;
+
   @extend .flex;
   @extend .flex-col;
   @extend .flex-ai-c;
-  margin-bottom: $space-lg;
 
   &__image {
   width: 4rem;
@@ -47,6 +49,7 @@
     font-size: $font-size-lg;
     font-weight: $font-weight-boldest;
   }
+
   &__title {
      font-size: $font-size-sm;
      font-weight: $font-weight-bold;
@@ -67,8 +70,9 @@
   @extend .flex-ai-c-jc-c;
 
   &__icon {
-    @extend .flex-ai-c-jc-c;
     margin-right: $space-xxs;
+    
+    @extend .flex-ai-c-jc-c;
   }
 
   background-color: $white;
@@ -81,7 +85,6 @@
   padding: $space-xs;
   color: $dark-gray;
   box-shadow: 0px 1px 0px #E2E2E2;
-
   transition: transform 0.3s ease;
 
   &:hover {
@@ -127,10 +130,6 @@
       background-color: black;
       color: $white;
       bottom: 10px;
-    }
-
-    span {
-      margin-left: 12px;
     }
   }
 

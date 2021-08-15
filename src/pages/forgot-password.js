@@ -64,7 +64,7 @@ const ForgotPasswordPage = () => {
 
   return (
     <Layout>
-      <div className="container center-vph-w-header form-content">
+      <div className="container center-vph-w-header">
         <Formik
           initialValues={initialFormValues}
           validationSchema={forgotPasswordValidationSchema}

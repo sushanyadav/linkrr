@@ -9,3 +9,24 @@ fieldset {
   margin-bottom: .8rem;
   font-size: 1.5rem;
 }
+
+button {
+  display: inline-block;
+  border: 0;
+  cursor: pointer;
+  font-weight: 500;
+  background-color: transparent;
+  color: $white;
+  font-family: 'Nunito', sans-serif;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+textarea {
+  font-family: 'Nunito', sans-serif;
+  font-weight: $font-weight-bolder;
+  font-size: $font-size-sm;
+  line-height: $line-height-md;
+}

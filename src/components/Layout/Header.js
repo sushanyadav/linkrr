@@ -14,9 +14,9 @@ const Header = () => {
   const isAuthPage = router.pathname === "/auth";
 
   return (
-    <div className="header-wrapper">
+    <div className="">
       <header className="container flex flex-jc-sb flex-ai-c">
-        <Link className="logo" href="/">
+        <Link className="" href="/">
           <a>linkrr</a>
         </Link>
         {session && !isAuthPage && (

@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import { signIn, getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
 
-import Layout from "components/Layout";
 import TextInput from "components/Form/TextInput";
+import Button from "components/Button";
 
 import { loginValidationSchema, signUpValidationSchema } from "utils/validate";
+
+import googleLogo from "assets/images/google_logo.png";
 
 const createUser = async (email, password, confirmPassword) => {
   // create user
@@ -36,6 +39,15 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isSubmitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
+
+  const initialTooltipValues = {
+    email: false,
+    password: false,
+    confirmPassword: false,
+  };
+
+  const [showToolTip, setShowToolTip] = useState({ ...initialTooltipValues });
+
   const router = useRouter();
   const { error: errorFromProvider } = router.query;
 
@@ -106,6 +118,28 @@ const AuthPage = () => {
     }
   };
 
+  const openToolTip = (field) => {
+    setShowToolTip({ ...showToolTip, [field]: true });
+  };
+
+  const closeToolTip = (field) => {
+    setShowToolTip({ ...showToolTip, [field]: false });
+  };
+
+  const openAllToolTip = () => {
+    Object.keys(showToolTip).forEach(function (key) {
+      showToolTip[key] = true;
+    });
+
+    setTimeout(() => {
+      reset();
+    }, 1000);
+  };
+
+  const reset = () => {
+    setShowToolTip(initialTooltipValues);
+  };
+
   const initialFormValues = {
     email: "",
     password: "",
@@ -113,9 +147,9 @@ const AuthPage = () => {
   };
 
   return (
-    <Layout>
-      <div className="container center-vph-w-header">
-        <div className="form-content login-content">
+    <div className="bg-gradient">
+      <div className="container center-vph">
+        <div className="form">
           <Formik
             initialValues={initialFormValues}
             validationSchema={
@@ -127,80 +161,102 @@ const AuthPage = () => {
               return (
                 <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
                   <fieldset>
-                    <legend>
-                      {isLogin ? "Login in to" : "Sign up for"} an account
+                    <legend className="form__head">
+                      {isLogin
+                        ? "Sign in to an account"
+                        : "Sign up for an account"}
                     </legend>
+                    <Button
+                      className="btn--primary"
+                      type="button"
+                      onClick={loginWithGoogle}
+                      text={`${isLogin ? "Sign in" : "Sign up"} with Google`}
+                      icon={
+                        <Image
+                          className="btn__img"
+                          src={googleLogo}
+                          alt="google"
+                        />
+                      }
+                    />
+                    <div className="divider">OR</div>
+
                     <TextInput
                       label="Email"
                       name="email"
                       type="text"
-                      placeholder=""
+                      showToolTip={showToolTip.email}
+                      openToolTip={() => openToolTip("email")}
+                      closeToolTip={() => closeToolTip("email")}
                     />
                     <TextInput
                       label="Password"
                       name="password"
                       type="password"
-                      placeholder=""
+                      showToolTip={showToolTip.password}
+                      openToolTip={() => openToolTip("password")}
+                      closeToolTip={() => closeToolTip("password")}
                     />
-
-                    {isLogin && (
-                      <div>
-                        <Link href="/forgot-password">
-                          <a>
-                            <small style={{ fontSize: "0.8rem" }}>
-                              Forgot password
-                            </small>
-                          </a>
-                        </Link>
-                      </div>
-                    )}
 
                     {!isLogin && (
                       <TextInput
                         label="Confirm Password"
                         name="confirmPassword"
                         type="password"
-                        placeholder=""
+                        showToolTip={showToolTip.confirmPassword}
+                        openToolTip={() => openToolTip("confirmPassword")}
+                        closeToolTip={() => closeToolTip("confirmPassword")}
                       />
                     )}
+
                     {error && <p className="error">{error}</p>}
-                    <button
-                      disabled={isSubmitting}
+                    <Button
+                      className="btn--primary"
                       type="submit"
-                      className="primary"
-                    >
-                      {isSubmitting ? "Submitting" : "Submit"}
-                    </button>
+                      text={
+                        isLogin
+                          ? isSubmitting
+                            ? "Signing in..."
+                            : "Sign up"
+                          : isSubmitting
+                          ? "Signing up..."
+                          : "Sign up"
+                      }
+                      disabled={isSubmitting}
+                      onClick={openAllToolTip}
+                    />
                   </fieldset>
-                  <hr className="separator" />
-                  <span className="or" style={{ display: "block" }}>
-                    OR
-                  </span>
-                  <button
-                    className="primary"
-                    style={{ display: "block" }}
-                    type="button"
-                    onClick={loginWithGoogle}
-                  >
-                    {isLogin ? "Login in" : "Sign up"} using google
-                  </button>
-                  <button
-                    style={{ display: "block" }}
-                    type="button"
-                    className="auth-switcher"
-                    onClick={() => switchAuthModeHandler(resetForm, setErrors)}
-                  >
-                    {isLogin
-                      ? "No account yet? Register"
-                      : "Already have an account! Login"}
-                  </button>
+                  <div className="switchers">
+                    {isLogin && (
+                      <>
+                        <Link href="/forgot-password">
+                          <a className="forgot-password">Forgot Password</a>
+                        </Link>
+                      </>
+                    )}
+                    <div className="dont-have-account-text">
+                      <span>
+                        {isLogin
+                          ? "Don’t have an account"
+                          : "Already have an account?"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          switchAuthModeHandler(resetForm, setErrors)
+                        }
+                      >
+                        {isLogin ? "Sign Up" : "Sign In"}
+                      </button>
+                    </div>
+                  </div>
                 </Form>
               );
             }}
           </Formik>
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

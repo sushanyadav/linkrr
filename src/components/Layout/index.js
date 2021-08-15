@@ -9,11 +9,11 @@ const Layout = ({ children }) => {
   }
 
   return (
-    <>
+    <div className="bg-gradient">
       <Header />
       {children}
       <Footer />
-    </>
+    </div>
   );
 };
 

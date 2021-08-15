@@ -1,12 +1,20 @@
 //colors
 $white: #fff;
+$black: #000;
+$light-black: #2A344A;
+$shadow-black: #252D3F;
+$violet: #7C3AED;
+$violet-light: #B183FF;
 $dark-gray: #374151;
 $cool-gray: #f5f5f5;
+$separator-color: rgba(255, 255, 255, 0.19);
+$accent: #3AD0DA;
 
 //font-size
 $font-size-sm: 0.875rem;
 $font-size-md: 1rem;
 $font-size-lg: 1.125rem;
+$font-size-xlg: 2rem;
 
 //font-weight
 $font-weight-bold: 600;
@@ -15,15 +23,13 @@ $font-weight-boldest: 800;
 
 //line-height
 $line-height-md: 1.5rem;
+$line-height-lg: 2.5rem;
 
 // borders
 $rounded-full: 50%;
 $rounded-xs: 0.875rem;
 $rounded-sm: 1rem;
 $border-md: 2px;
-
-// padding
-$padding-md: 2rem;
 
 //spacing
 $space-xxs: 0.375rem;
@@ -32,4 +38,8 @@ $space-xs: 0.625rem;
 $space-xs-lg: 0.75rem;
 $space-sm: 1rem;
 $space-md: 1.5rem;
-$space-lg: 2rem;
+$space-lg: 1.25rem;
+$space-xl: 2rem;
+
+//box shadow
+$box-shadow: 0px 7px 0px $shadow-black;
