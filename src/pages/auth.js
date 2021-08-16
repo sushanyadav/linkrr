@@ -12,7 +12,13 @@ import { loginValidationSchema, signUpValidationSchema } from "utils/validate";
 
 import googleLogo from "assets/images/google_logo.png";
 
-const createUser = async (email, password, confirmPassword) => {
+const createUser = async (
+  email,
+  password,
+  confirmPassword,
+  firstName,
+  lastName
+) => {
   // create user
   const response = await fetch(`/api/auth/signup`, {
     method: "POST",
@@ -23,6 +29,8 @@ const createUser = async (email, password, confirmPassword) => {
       email,
       password,
       confirmPassword,
+      firstName,
+      lastName,
     }),
   });
 
@@ -44,6 +52,8 @@ const AuthPage = () => {
     email: false,
     password: false,
     confirmPassword: false,
+    firstName: false,
+    lastName: false,
   };
 
   const [showToolTip, setShowToolTip] = useState({ ...initialTooltipValues });
@@ -99,7 +109,9 @@ const AuthPage = () => {
         const result = await createUser(
           email,
           password,
-          values.confirmPassword
+          values.confirmPassword,
+          values.firstName,
+          values.lastName
         );
 
         if (result) {
@@ -141,6 +153,8 @@ const AuthPage = () => {
   };
 
   const initialFormValues = {
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -189,6 +203,28 @@ const AuthPage = () => {
                       openToolTip={() => openToolTip("email")}
                       closeToolTip={() => closeToolTip("email")}
                     />
+                    {!isLogin && (
+                      <div className="horizontal-fields">
+                        <TextInput
+                          label="First Name"
+                          name="firstName"
+                          type="text"
+                          showToolTip={showToolTip.firstName}
+                          openToolTip={() => openToolTip("firstName")}
+                          closeToolTip={() => closeToolTip("firstName")}
+                        />
+
+                        <TextInput
+                          label="Last Name"
+                          name="lastName"
+                          type="text"
+                          showToolTip={showToolTip.lastName}
+                          openToolTip={() => openToolTip("lastName")}
+                          closeToolTip={() => closeToolTip("lastName")}
+                        />
+                      </div>
+                    )}
+
                     <TextInput
                       label="Password"
                       name="password"

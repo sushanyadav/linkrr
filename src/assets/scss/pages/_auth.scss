@@ -31,4 +31,11 @@
     text-decoration: underline;
     }
   }
+
+  .horizontal-fields {
+    display: flex;
+    div:first-child {
+      margin-right: $space-lg;
+    }
+  }
 }

@@ -7,7 +7,7 @@ const handler = async (req, res) => {
   if (req.method !== "POST") return;
   const data = req.body;
 
-  const { email, password } = data;
+  const { email, firstName, lastName, password } = data;
 
   try {
     await signUpValidationSchema.validate(req.body, {
@@ -54,9 +54,13 @@ const handler = async (req, res) => {
   const hashedPassword = await hashPassword(password);
 
   try {
-    const result = await db
-      .collection("users")
-      .insertOne({ email, password: hashedPassword, provider: "credentials" });
+    const result = await db.collection("users").insertOne({
+      email,
+      firstName,
+      lastName,
+      password: hashedPassword,
+      provider: "credentials",
+    });
 
     res.status(201).json({ message: "Created user!", result });
     client.close();

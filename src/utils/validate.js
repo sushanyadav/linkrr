@@ -23,6 +23,8 @@ export const resetPasswordValidationSchema = object().shape({
 
 export const signUpValidationSchema = object().shape({
   email: string().required("Required").email("Invalid email address"),
+  firstName: string().required("Required"),
+  lastName: string().required("Required"),
   password: string()
     .required("No password provided.")
     .min(8, "Password is too short - should be 8 chars minimum."),
