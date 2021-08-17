@@ -69,7 +69,15 @@ export default NextAuth({
 
         client.close();
 
-        return { email: user.email, provider: "credentials" };
+        return {
+          email: user.email,
+          name:
+            user.firstName || user.lastName
+              ? `${user.firstName} ${user.lastName}`
+              : null,
+          image: user?.data?.personalDetails?.profileImage,
+          provider: "credentials",
+        };
       },
     }),
     Providers.Google({

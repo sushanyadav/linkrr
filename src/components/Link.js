@@ -154,7 +154,7 @@ const Link = ({
               onClick={onSendMessageClick}
             >
               Send message
-              <span>💬</span>
+              <span> 💬</span>
             </button>
           </div>
         )}

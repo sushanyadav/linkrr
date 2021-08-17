@@ -116,9 +116,7 @@ const FormikForm = ({
             return (
               <>
                 <div className="flex flex-ai-c flex-jc-sb mb-2">
-                  <legend className="legend-without-margin">
-                    Social Links
-                  </legend>
+                  <legend>Social Links</legend>
                   <button
                     type="button"
                     className="primary"
@@ -171,7 +169,7 @@ const FormikForm = ({
       </fieldset>
       <fieldset>
         <div className="flex flex-ai-c flex-jc-sb mb-2">
-          <legend className="legend-without-margin">Contact Form</legend>
+          <legend>Contact Form</legend>
           <CheckboxInput noLabel name="contactForm.toggle" type="checkbox" />
         </div>
         <div style={{ width: "40%" }}>

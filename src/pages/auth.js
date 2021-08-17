@@ -7,6 +7,7 @@ import Image from "next/image";
 
 import TextInput from "components/Form/TextInput";
 import Button from "components/Button";
+import Layout from "components/Layout";
 
 import { loginValidationSchema, signUpValidationSchema } from "utils/validate";
 
@@ -145,7 +146,7 @@ const AuthPage = () => {
 
     setTimeout(() => {
       reset();
-    }, 1000);
+    }, 2000);
   };
 
   const reset = () => {
@@ -161,7 +162,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="bg-gradient">
+    <Layout wrapperClassName="bg-gradient">
       <div className="container center-vph">
         <div className="form">
           <Formik
@@ -173,7 +174,7 @@ const AuthPage = () => {
           >
             {({ resetForm, setErrors }) => {
               return (
-                <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
+                <Form>
                   <fieldset>
                     <legend className="form__head">
                       {isLogin
@@ -273,7 +274,7 @@ const AuthPage = () => {
                     <div className="dont-have-account-text">
                       <span>
                         {isLogin
-                          ? "Don’t have an account"
+                          ? "Don’t have an account yet? "
                           : "Already have an account?"}
                       </span>
                       <button
@@ -292,7 +293,7 @@ const AuthPage = () => {
           </Formik>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import Footer from "./Footer";
 import Header from "./Header";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, wrapperClassName }) => {
   if (children.type.name === "LinkPage") {
     return children;
   }
 
   return (
-    <div className="bg-gradient">
+    <div className={wrapperClassName}>
       <Header />
       {children}
       <Footer />
@@ -17,9 +17,12 @@ const Layout = ({ children }) => {
   );
 };
 
-Layout.defaultProps = {};
+Layout.defaultProps = {
+  wrapperClassName: "",
+};
 
 Layout.propTypes = {
+  wrapperClassName: PropTypes.string,
   children: PropTypes.oneOfType([
     PropTypes.object.isRequired,
     PropTypes.array.isRequired,

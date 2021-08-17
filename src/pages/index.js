@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 
 import Layout from "components/Layout";
+import Button from "components/Button";
 
 import { connectToDatabase } from "lib/db";
 
@@ -11,6 +12,7 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
   const [link, setLink] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showGotoPreviewIcon, setShowGotoPreviewIcon] = useState(false);
 
   const router = useRouter();
   const { error: errorFromProvider, link: linkFromServer } = router.query;
@@ -55,47 +57,86 @@ export default function HomePage({ session, errorFromServer, hasLink, data }) {
     });
   };
 
+  const gotoLink = () => {
+    router.push({
+      pathname: `${data.link}`,
+    });
+  };
+
   return (
     <Layout>
-      <main className="container center-vph flex flex-col">
-        <h1 className="main-text">
-          Logged in from <strong>{session.user.email}</strong>
-        </h1>
-        {hasLink ? (
-          <>
-            <h2>Your link</h2>
-            <p>domain.com/{data.link}</p>
-            <button onClick={goToEditPage}>Edit link</button>
-          </>
-        ) : (
-          <form className="" onSubmit={submitHandler}>
-            <fieldset>
-              <legend>Lets create a link</legend>
-              <label htmlFor="link">
-                <span className="sr-only">Link</span>
-                <div className="input-wrapper">
-                  <span className="">domain.com/</span>
-                  <input
-                    value={link}
-                    onChange={(e) => setLink(e.target.value)}
-                    id="link"
-                    name="link"
-                    type="text"
+      <div className="homepage">
+        <main className="container">
+          <div className="homepage__content">
+            {hasLink ? (
+              <>
+                <h1>Your Link 🔗</h1>
+                <div className="flex">
+                  <div className="input-wrapper">
+                    <input
+                      disabled
+                      type="text"
+                      className="form-input"
+                      // value={`domain.com/${data.link}`}
+                      onMouseLeave={() => setShowGotoPreviewIcon(false)}
+                      onMouseOver={() => setShowGotoPreviewIcon(true)}
+                    />
+
+                    <div className="goto-icon" onClick={gotoLink}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="32"
+                        height="32"
+                        onMouseOver={() => setShowGotoPreviewIcon(true)}
+                        className={showGotoPreviewIcon ? "show" : ""}
+                        viewBox="0 0 32 32"
+                      >
+                        <rect width="32" height="32" rx="16"></rect>
+                        <path
+                          fill="#fff"
+                          d="M8 17h12.17l-3.58 3.59L18 22l6-6-6-6-1.41 1.41L20.17 15H8v2z"
+                        ></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <Button
+                    onClick={goToEditPage}
+                    className="btn--primary width-auto"
+                    text="Edit"
                   />
                 </div>
-              </label>
-              {error && <p className="error">{error}</p>}
-              <button
-                disabled={isSubmitting}
-                type="submit"
-                className="primary mt-2"
-              >
-                {isSubmitting ? "Creating..." : "Create"}
-              </button>
-            </fieldset>
-          </form>
-        )}
-      </main>
+              </>
+            ) : (
+              <form className="" onSubmit={submitHandler}>
+                <fieldset>
+                  <legend>Lets create a link</legend>
+                  <label htmlFor="link">
+                    <span className="sr-only">Link</span>
+                    <div className="input-wrapper">
+                      <span className="">domain.com/</span>
+                      <input
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                        id="link"
+                        name="link"
+                        type="text"
+                      />
+                    </div>
+                  </label>
+                  {error && <p className="error">{error}</p>}
+                  <button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className=" mt-2"
+                  >
+                    {isSubmitting ? "Creating..." : "Create"}
+                  </button>
+                </fieldset>
+              </form>
+            )}
+          </div>
+        </main>
+      </div>
     </Layout>
   );
 }

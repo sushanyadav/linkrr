@@ -1,3 +1,51 @@
-.main-text {
- margin-bottom: 1rem;
+.homepage {
+  @extend .border-t;
+  padding-top: 80px;
+  
+  &__content {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+
+  @extend .flex;
+  @extend .flex-col;
+  @include min-break-point(tablet) {
+  width: 50%;
+  }
+
+  h1 {
+    margin-bottom: $space-md;
+  }
+
+  .input-wrapper {
+    margin-right: $space-lg;
+    position: relative;
+
+    .goto-icon {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+
+      svg {
+        visibility: hidden;
+ 
+        rect {
+          fill: #9CA3AF;
+        }
+
+        &:hover {
+          rect {
+          fill: #1EAAB4;
+        }
+        }
+
+        &.show {
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  
+  }
 }

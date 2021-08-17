@@ -1,14 +1,73 @@
 // container
 .container {
+  max-width: 1536px;
+  padding: 0 $space-xxl;
+  margin: 0 auto;
+
   &--link {
     @extend .container;
     max-width: 714px;
-    padding: $space-xl $space-md;
+    padding: $space-xl $space-xxl;
   }
+}
+
+//header 
+.header-wrapper {
+  padding: $space-lg 0;
+  max-height: $header-height;
   
-  max-width: 1536px;
-  padding: 0 $space-md;
-  margin: 0 auto;
+  header {
+    padding: 8px 20px;
+  }
+}
+
+.one-link {
+  display: flex;
+  align-items: center;
+
+  &.black {
+    color: #111827;
+  }
+
+ &__logo {
+   display: inline-block;
+   height: $logo-height;
+   width: $logo-height;
+   background-color: #000;
+   border-radius: $rounded-full;
+   margin-right: $space-md-xs;
+   @extend .center;
+
+   span {
+    display: inline-block;
+    width: 18.18px;
+    height: 18.18px;
+    background-color: #fff;
+    border-radius: $rounded-full;
+    font-size: 12.1212px;
+    line-height: 24px;
+    color: #111827;
+    @extend .center;
+   }
+ }
+}
+
+.personal-info {
+  margin-right: $space-xl;
+  //padding: $space-md-xs;
+  padding-right: $space-sm;
+
+  &__data {
+    .email {
+      color: #6B7280;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .username {
+     
+    }
+  }
 }
 
 //separator
@@ -46,30 +105,75 @@
 .btn {
   display: flex;
   text-align: center;
-  width: 100%;
+  color: $white;
+  
+  &.black {
+  color: $black;
+    
+  }
+
+  &--primary {
   padding: $space-lg;
+  width: 100%;  
   border: 1px solid $light-black;
   border-radius: $rounded-sm;
   font-size: $font-size-md;
   font-weight: $font-weight-boldest;
-  line-height: $line-height-md;
-
-  &--primary {
+  line-height: $line-height-md;  
   background-color: $black;
   box-shadow: $box-shadow;
   align-items: center;
   justify-content: center;
   transition: background-color, color .3s ease;
+
+  &.width-auto {
+    width: auto;
+  }
+
   &:hover {
     background-color: $accent;
     color: $black;
   }
 
   span { 
-    height: 16px; // height of the icon
     margin-left: $space-xs;
+    height: 16px; // height of the icon
   }
 }
+}
+
+// rounded image
+.rounded-image {
+  width: $rounded-img-height;
+  height: $rounded-img-height;
+  border-radius: $rounded-full;
+  border: $border-md solid $white;
+
+  &.rounded-small-image {
+  border: $border-md solid $black;
+  width: $rounded-smaller-img-height;
+  height: $rounded-smaller-img-height;
+  }
+
+  img {
+    object-fit: cover;
+    object-position: center;
+    border-radius: $rounded-full;
+    }
+}
+
+.preview-placeholder {
+  width: $rounded-img-height;
+  height: $rounded-img-height;
+  border-radius: $rounded-full;
+  border: $border-md solid $black;
+  @extend .center;
+  
+  &.preview-small-placeholder {
+    @extend .preview-placeholder;
+    width: $rounded-smaller-img-height;
+    height: $rounded-smaller-img-height;
+  }
 }
 
 // Flexbox
@@ -106,22 +210,22 @@
   }
 }
 
-.flex-ai-c-jc-c {
+.center {
   @extend .flex;
   @extend .flex-jc-c;
   @extend .flex-ai-c ;
 }
 
+//borders
+.border-t {
+  border-top: $border-sm solid #E5E7EB;
+}
+
 
 // centering to viewport height
 .center-vph {
-  min-height: 100vh;
-  &-w-header{
-    min-height: calc(100vh - 4rem); // deducting the height of header
-    @extend .flex-ai-c-jc-c;
-  }
-
-  @extend .flex-ai-c-jc-c;
+  min-height: calc(100vh - 4.5rem); //deducting header's height
+  @extend .center;
 }
 
 // errors and feedback messages
@@ -201,9 +305,19 @@
 .form__head {
   text-align: center;
   color: $white;
-  font-size: $font-size-xlg;
-  line-height: $line-height-lg;
   margin-bottom: $space-md;
+
+  legend {
+     line-height: $line-height-lg;
+     font-weight: $font-weight-boldest;
+     font-size: $font-size-xlg;
+  }
+
+  small {
+  font-weight: normal;
+  font-size: $font-size-md;
+  line-height: $line-height-md;
+  }
 }
 
 .form-group {

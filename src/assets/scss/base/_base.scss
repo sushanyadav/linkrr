@@ -23,9 +23,9 @@ a {
   line-height: 24px;
   cursor: pointer;
   color: white;
+  text-decoration: none;
 
   &:hover {
-    
     outline-width: 0;
   }
 
@@ -42,16 +42,6 @@ form {
   width: 100%;
 }
 
-legend {
-  margin-bottom: 1rem;
-  font-size: 1.2rem; 
-  font-weight: bold;
-}
-
-.legend-without-margin {
- @extend legend;
- margin: 0;
-}
 
 fieldset {
   *:not(:first-child) {

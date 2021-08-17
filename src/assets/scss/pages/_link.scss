@@ -32,16 +32,7 @@
   @extend .flex-ai-c;
 
   &__image {
-  width: 4rem;
-  height: 4rem;
-  border-radius: $rounded-full;
-  border: $border-md solid $white;
-
-  img {
-    object-fit: cover;
-    object-position: center;
-    border-radius: $rounded-full;
-    }
+    @extend .rounded-image;
   }
 
   &__name {
@@ -67,12 +58,12 @@
 }
 
 .link-content {
-  @extend .flex-ai-c-jc-c;
+  @extend .center;
 
   &__icon {
     margin-right: $space-xxs;
     
-    @extend .flex-ai-c-jc-c;
+    @extend .center;
   }
 
   background-color: $white;

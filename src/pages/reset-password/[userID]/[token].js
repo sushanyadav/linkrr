@@ -7,6 +7,7 @@ import PropTypes from "prop-types";
 
 import TextInput from "components/Form/TextInput";
 import Layout from "components/Layout";
+import Button from "components/Button";
 
 import { resetPasswordValidationSchema } from "utils/validate";
 
@@ -42,8 +43,13 @@ const changePassword = async (
 };
 
 const ResetPassword = ({ errorFromServer, payload }) => {
+  const initialTooltipValues = {
+    password: false,
+    confirmPassword: false,
+  };
   const [error, setError] = useState("");
   const [feedback, setFeedback] = useState("");
+  const [showToolTip, setShowToolTip] = useState({ ...initialTooltipValues });
 
   const router = useRouter();
 
@@ -107,52 +113,88 @@ const ResetPassword = ({ errorFromServer, payload }) => {
     password: "",
   };
 
+  const openToolTip = (field) => {
+    setShowToolTip({ ...showToolTip, [field]: true });
+  };
+
+  const closeToolTip = (field) => {
+    setShowToolTip({ ...showToolTip, [field]: false });
+  };
+
+  const reset = () => {
+    setShowToolTip(initialTooltipValues);
+  };
+
+  const openAllToolTip = () => {
+    Object.keys(showToolTip).forEach(function (key) {
+      showToolTip[key] = true;
+    });
+
+    setTimeout(() => {
+      reset();
+    }, 2000);
+  };
+
   return (
-    <Layout>
-      <div className="container center-vph-w-header">
-        <Formik
-          initialValues={initialFormValues}
-          validationSchema={resetPasswordValidationSchema}
-          onSubmit={submitHandler}
-        >
-          {({ isSubmitting }) => {
-            return (
-              <Form style={{ maxWidth: "420px", minWidth: "320px" }}>
-                <fieldset>
-                  <legend>Change password for {payload.email}</legend>
-                  <TextInput
-                    label="Password"
-                    name="password"
-                    type="password"
-                    placeholder=""
-                  />
-                  <TextInput
-                    label="Confirm Password"
-                    name="confirmPassword"
-                    type="password"
-                    placeholder=""
-                  />
-                  {error && <p className="error">{error}</p>}
-                  {feedback && (
-                    <>
-                      <p className="feedback">{feedback}</p>
-                      <p className="feedback">
-                        Redirecting you to log in page...
-                      </p>
-                    </>
-                  )}
-                  <button
-                    disabled={isSubmitting}
-                    type="submit"
-                    className="primary"
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit"}
-                  </button>
-                </fieldset>
-              </Form>
-            );
-          }}
-        </Formik>
+    <Layout wrapperClassName="bg-gradient">
+      <div className="container center-vph">
+        <div className="form">
+          <Formik
+            initialValues={initialFormValues}
+            validationSchema={resetPasswordValidationSchema}
+            onSubmit={submitHandler}
+          >
+            {({ isSubmitting }) => {
+              return (
+                <Form>
+                  <fieldset>
+                    <div className="form__head">
+                      <legend>Forget password</legend>
+                      <small>Setting a new password for {payload.email}</small>
+                    </div>
+
+                    <TextInput
+                      label="Password"
+                      name="password"
+                      type="password"
+                      showToolTip={showToolTip.password}
+                      openToolTip={() => openToolTip("password")}
+                      closeToolTip={() => closeToolTip("password")}
+                    />
+                    <TextInput
+                      label="Confirm Password"
+                      name="confirmPassword"
+                      type="password"
+                      showToolTip={showToolTip.confirmPassword}
+                      openToolTip={() => openToolTip("confirmPassword")}
+                      closeToolTip={() => closeToolTip("confirmPassword")}
+                    />
+                    {error && <p className="error">{error}</p>}
+                    {feedback && (
+                      <>
+                        <p className="feedback">{feedback}</p>
+                        <p className="feedback">
+                          Redirecting you to log in page...
+                        </p>
+                      </>
+                    )}
+                    <Button
+                      className="btn--primary"
+                      type="submit"
+                      text={
+                        isSubmitting
+                          ? "Changing password..."
+                          : "Change password"
+                      }
+                      onClick={openAllToolTip}
+                      disabled={isSubmitting}
+                    />
+                  </fieldset>
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
       </div>
     </Layout>
   );

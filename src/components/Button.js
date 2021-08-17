@@ -9,7 +9,7 @@ const Button = ({ type, text, icon, className, disabled, onClick }) => {
       className={`${className} btn`}
     >
       {text}
-      {icon && <span>{icon}</span>}
+      {icon && <span style={{ marginLeft: "0.5rem" }}>{icon}</span>}
     </button>
   );
 };

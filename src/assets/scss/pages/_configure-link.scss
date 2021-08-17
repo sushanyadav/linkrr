@@ -26,12 +26,3 @@
   object-position: center;
   border-radius: 100%;
 }
-
-.preview-placeholder {
-  width: 60px;
-  height:60px;
-  background-color: #ccc;
-  border-radius: 100%;
-  @extend .flex-ai-c-jc-c;
-  @extend .flex-col;
-}
