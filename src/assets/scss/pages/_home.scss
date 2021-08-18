@@ -10,11 +10,19 @@
   @extend .flex;
   @extend .flex-col;
   @include min-break-point(tablet) {
-  width: 50%;
+  width: 70%;
   }
 
-  h1 {
+  .form {
+    width: 70%;
+    margin: 0 auto;
+  }
+
+  legend {
     margin-bottom: $space-md;
+    font-weight: 800;
+    font-size: 32px;
+    line-height: 40px;
   }
 
   .input-wrapper {
@@ -46,6 +54,40 @@
     }
   }
 
-  
+  button {
+    svg {
+      width: 16px;
+      height: 16px;
+      path {
+        transition: fill 0.3s ease;
+        fill: $white;
+      }
+    }
+
+    &:hover svg {
+      path {
+        fill: $black;
+      }
+    }
+  }
+
+  }
+  .form-input__create-link {
+    font-size: 20px;
+    line-height: 24px;
+    text-indent: 12.6rem;
+  }
+}
+
+
+.edit_link {
+  position: absolute;
+  top: 20px;
+  left: 25px;
+  font-size: 20px;
+  line-height: 24px;
+  span {
+    color: #1EAAB4;
+    font-weight: $font-weight-bolder;
   }
 }

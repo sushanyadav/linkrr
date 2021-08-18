@@ -76,19 +76,19 @@ const Link = ({
       >
         <div className="link__main">
           <div className="profile-info">
-            <div className="profile-info__image">
-              {!errors?.personalDetails?.profileImage &&
-              personalDetails.profileImage ? (
+            {!errors?.personalDetails?.profileImage &&
+            personalDetails.profileImage ? (
+              <div className="profile-info__image">
                 <Image
                   src={personalDetails.profileImage}
                   alt={personalDetails.name}
                   width={200}
                   height={200}
                 />
-              ) : (
-                <div className="preview-placeholder"></div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="preview-placeholder border-white"></div>
+            )}
             <h1 className="profile-info__name">{personalDetails.name}</h1>
             <h2 className="profile-info__title">{personalDetails.title}</h2>
           </div>

@@ -24,6 +24,12 @@ export default function EditPage({ errorFromServer, initialFormValues }) {
     }
   }, [initialFormValues]);
 
+  useEffect(() => {
+    if (document && !errorFromServer) {
+      document.querySelector("#dummy").click();
+    }
+  }, [errorFromServer]);
+
   if (errorFromServer) {
     return (
       <Layout>
@@ -44,6 +50,7 @@ export default function EditPage({ errorFromServer, initialFormValues }) {
   return (
     <Layout>
       <section className="container">
+        <div id="dummy"></div>
         <ConfigureLink heading="Edit" initialFormValues={initialFormValues} />
       </section>
     </Layout>

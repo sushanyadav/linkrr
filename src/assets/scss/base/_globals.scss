@@ -168,6 +168,10 @@
   border-radius: $rounded-full;
   border: $border-md solid $black;
   @extend .center;
+
+  &.border-white {
+  border: $border-md solid $white;
+  }
   
   &.preview-small-placeholder {
     @extend .preview-placeholder;
