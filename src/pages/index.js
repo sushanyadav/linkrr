@@ -119,7 +119,7 @@ export default function HomePage({
                       value={link}
                       id="link"
                       name="link"
-                      placeholder={!hasLink && "enter your link"}
+                      placeholder={!hasLink ? "enter your link" : ""}
                       onChange={(e) => {
                         !hasLink && setLink(e.target.value), setError("");
                       }}

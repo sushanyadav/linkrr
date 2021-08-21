@@ -83,6 +83,148 @@ input[type="email"] {
   }
 }
 
+// color picker
+.color-picker-wrapper {
+    display: flex;
+    align-items: center;
+
+    input[type="color"] {
+    border-radius: 50%;
+    height: 26px;
+    width: 26px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+
+    &::-webkit-color-swatch-wrapper {
+    padding: 0; 
+    }
+
+    &::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+    }
+  }
+}
+// switch
+.switch {
+  display: inline-flex;
+  margin: 0 10px;
+}
+.switch input[type=checkbox] {
+  height: 0;
+  width: 0;
+  visibility: hidden;
+}
+.switch input[type=checkbox]:checked + label {
+  background: #3AD0DA;
+
+  &::after {
+  background: $white;
+  }
+}
+.switch input[type=checkbox]:checked + label::after {
+  left: calc(100% - 4px);
+  transform: translateX(-100%);
+}
+.switch label {
+  cursor: pointer;
+  width: 48px;
+  height: 24px;
+  background: #E5E7EB;
+  display: block;
+  border-radius: 24px;
+  position: relative;
+}
+.switch label::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  background: #D1D5DB;
+  border-radius: 16px;
+  transition: 0.3s;
+}
+
+.checkbox {
+  input[type="checkbox"] {
+    position: absolute; // take it out of document flow
+    opacity: 0; // hide it
+  
+    & + label {
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+    }
+  
+    // Box.
+    & + label:before {
+      content: '';
+      margin-right: 10px;
+      display: inline-block;
+      vertical-align: text-top;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid $accent;
+    }
+  
+      &.no-margin + label:before {
+      margin-right: 0;
+      }
+  
+    // Box hover
+    &:hover + label:before {
+      background: $accent;
+    }
+    
+    // Box focus
+    &:focus + label:before {
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+    }
+  
+    // Box checked
+    &:checked + label:before {
+      background: $accent;
+    }
+    
+    // Disabled state label.
+    &:disabled + label {
+      color: #b8b8b8;
+      cursor: auto;
+    }
+  
+    // Disabled box.
+    &:disabled + label:before {
+      box-shadow: none;
+      background: #ddd;
+    }
+  
+    // Checkbox. Could be replaced with an image
+    &:checked + label:after {
+      content: '';
+      position: absolute;
+      left: 6.4px;
+      top: 11px;
+      background: white;
+      width: 2px;
+      height: 2px;
+      box-shadow: 
+        2px 0 0 white,
+        4px 0 0 white,
+        4px -2px 0 white,
+        4px -4px 0 white,
+        4px -6px 0 white,
+        4px -8px 0 white;
+      transform: rotate(45deg);
+    }
+  }
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }

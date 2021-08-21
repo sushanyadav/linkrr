@@ -6,6 +6,7 @@ const Button = ({
   icon,
   iconLeft,
   className,
+  spanClassName,
   disabled,
   onClick,
 }) => {
@@ -14,14 +15,24 @@ const Button = ({
       onClick={onClick}
       type={type}
       disabled={disabled}
-      className={`${className} btn`}
+      className={`${className} btn center`}
     >
       {icon && iconLeft && (
-        <span style={{ marginRight: "0.5rem" }}>{icon}</span>
+        <span
+          className={spanClassName}
+          style={{ marginRight: text ? "0.5rem" : 0 }}
+        >
+          {icon}
+        </span>
       )}
       {text}
       {icon && !iconLeft && (
-        <span style={{ marginLeft: "0.5rem" }}>{icon}</span>
+        <span
+          className={spanClassName}
+          style={{ marginLeft: text ? "0.5rem" : 0 }}
+        >
+          {icon}
+        </span>
       )}
     </button>
   );
@@ -32,6 +43,7 @@ Button.defaultProps = {
   disabled: false,
   iconLeft: false,
   className: "",
+  spanClassName: "",
   onClick: undefined,
   type: "button",
 };
@@ -42,6 +54,7 @@ Button.propTypes = {
   disabled: PropTypes.bool,
   iconLeft: PropTypes.bool,
   className: PropTypes.string,
+  spanClassName: PropTypes.string,
   type: PropTypes.string,
   onClick: PropTypes.func,
 };

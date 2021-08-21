@@ -10,11 +10,12 @@ const ColorInput = ({ label, labelAdditionalClassName, noLabel, ...props }) => {
         <input {...field} {...props} />
       ) : (
         <label
-          className={labelAdditionalClassName}
+          className={`${labelAdditionalClassName} color-picker-wrapper`}
           htmlFor={props.id || props.name}
         >
           <span className="mr-1">{label}</span>
           <input {...field} {...props} />
+          <span className="color-preview"></span>
         </label>
       )}
 

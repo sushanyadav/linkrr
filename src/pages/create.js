@@ -9,7 +9,7 @@ import Layout from "components/Layout";
 
 import { connectToDatabase } from "lib/db";
 
-export default function CreatePage({ errorFromServer }) {
+export default function CreatePage({ baseUrl, errorFromServer }) {
   const router = useRouter();
 
   const [link, setLink] = useState("");
@@ -57,9 +57,15 @@ export default function CreatePage({ errorFromServer }) {
 
   return (
     <Layout>
-      <section className="container">
-        <ConfigureLink heading="Create" initialFormValues={initialFormValues} />
-      </section>
+      <div className="link-section">
+        <section className="container">
+          <ConfigureLink
+            baseUrl={baseUrl}
+            heading="Create"
+            initialFormValues={initialFormValues}
+          />
+        </section>
+      </div>
     </Layout>
   );
 }
@@ -67,11 +73,13 @@ export default function CreatePage({ errorFromServer }) {
 CreatePage.defaultProps = {
   session: undefined,
   errorFromServer: undefined,
+  baseUrl: "",
 };
 
 CreatePage.propTypes = {
   session: PropTypes.object,
   errorFromServer: PropTypes.string,
+  baseUrl: PropTypes.string,
 };
 
 export async function getServerSideProps(context) {
@@ -148,6 +156,6 @@ export async function getServerSideProps(context) {
   }
 
   return {
-    props: { session },
+    props: { session, baseUrl: process.env.BASE_URL },
   };
 }

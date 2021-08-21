@@ -7,6 +7,7 @@ import ImageFileInput from "components/Form/ProfileImageFileInput";
 import TextInput from "components/Form/TextInput";
 import ColorInput from "components/Form/ColorInput";
 import CheckboxInput from "components/Form/CheckboxInput";
+import Button from "components/Button";
 
 import { validationSchema } from "utils/validate";
 
@@ -19,6 +20,7 @@ const FormikForm = ({
   isSubmitting,
   values,
   getFormValues,
+  baseUrl,
   getFormErrors,
   initialFormValues,
   path,
@@ -31,21 +33,39 @@ const FormikForm = ({
     getFormErrors(errors);
   }, [getFormErrors, errors]);
 
-  if (!values.contactForm.toggle) {
-    values.contactForm.apiEmailAddress = "";
-    values.contactForm.apiKey = "";
-  }
-
   return (
     <Form>
-      <div className="flex flex-ai-c flex-jc-sb link-section-heading">
+      <div className="link-section__heading">
         <h2>{heading}</h2>
-        <div>
-          <span>domain.com/</span>
-          <TextInput noLabel name="link" type="text" placeholder="" />
-        </div>
+        <fieldset className="fieldset">
+          <legend>Your link</legend>
+          <small>
+            This is the link to your mini site that you can use to share all of
+            your links.
+          </small>
+          <div className="input-wrapper">
+            <TextInput
+              className="indent-text-for-domain edit"
+              noLabel
+              name="link"
+              type="text"
+            />
+            <span className="edit_link smaller">{baseUrl}/</span>
+          </div>
+        </fieldset>
       </div>
-      <fieldset>
+      <fieldset className="fieldset">
+        <legend>Theme</legend>
+        <div className="input-wrapper">
+          <ColorInput
+            labelAdditionalClassName="label-horizontal"
+            label="Pick a color"
+            name="personalDetails.backgroundColor"
+            type="color"
+          />
+        </div>
+      </fieldset>
+      <fieldset className="fieldset">
         <legend>Personal Details</legend>
 
         <ImageFileInput
@@ -58,34 +78,24 @@ const FormikForm = ({
           setFieldTouched={setFieldTouched}
         />
 
-        <div className="flex">
-          <div className="input-wrapper">
-            <TextInput
-              label="Name"
-              name="personalDetails.name"
-              type="text"
-              placeholder=""
-            />
-          </div>
-          <div className="input-wrapper ml-2">
-            <TextInput
-              label="Title"
-              name="personalDetails.title"
-              type="text"
-              placeholder=""
-            />
-          </div>
-          <div className="input-wrapper ml-2">
-            <ColorInput
-              labelAdditionalClassName="label-horizontal"
-              label="Background Color"
-              name="personalDetails.backgroundColor"
-              type="color"
-            />
-          </div>
+        <div className="input-wrapper">
+          <TextInput
+            label="Name"
+            name="personalDetails.name"
+            type="text"
+            placeholder=""
+          />
+        </div>
+        <div className="input-wrapper">
+          <TextInput
+            label="Title"
+            name="personalDetails.title"
+            type="text"
+            placeholder=""
+          />
         </div>
       </fieldset>
-      <fieldset>
+      <fieldset className="fieldset">
         <FieldArray
           name="socials.socials"
           render={({ remove, push }) => {
@@ -116,18 +126,34 @@ const FormikForm = ({
             return (
               <>
                 <div className="flex flex-ai-c flex-jc-sb mb-2">
-                  <legend>Social Links</legend>
-                  <button
+                  <legend className="no-margin">Links</legend>
+                  <Button
+                    className="btn--primary add-btn width-auto"
+                    spanClassName="h-24"
                     type="button"
-                    className="primary"
-                    // disabled={disableAddMoreBtn}
+                    icon={
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          fill="#fff"
+                          d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                        ></path>
+                      </svg>
+                    }
                     onClick={onAddMoreBtnClick}
-                  >
-                    Add more
-                  </button>
+                  />
                 </div>
                 {values.socials.socials.map((social, index) => (
-                  <div key={index} className="flex ">
+                  <div
+                    key={index}
+                    style={{ marginBottom: "0" }}
+                    className="flex"
+                  >
                     <div className="input-wrapper">
                       <TextInput
                         label="Name"
@@ -136,7 +162,7 @@ const FormikForm = ({
                         placeholder=""
                       />
                     </div>
-                    <div className="input-wrapper ml-1">
+                    <div className="input-wrapper ml-2">
                       <TextInput
                         label="Link"
                         name={`socials.socials[${index}].link`}
@@ -144,15 +170,32 @@ const FormikForm = ({
                         placeholder=""
                       />
                     </div>
-                    <div className="flex ml-1 flex-ai-c flex-jc-e">
-                      <button
-                        className="primary"
+                    <div className="ml-2">
+                      <Button
+                        className="btn--secondary width-auto"
+                        spanClassName="h-24"
                         type="button"
                         disabled={values.socials.socials.length <= 1}
+                        icon={
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              fill="#111827"
+                              d="M15 2H9c-1.103 0-2 .897-2 2v1H3v2h2v13c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V7h2V5h-4V4c0-1.103-.897-2-2-2zM9 4h6v1H9V4zm8 16H7V7h10v13z"
+                            ></path>
+                            <path
+                              fill="#111827"
+                              d="M9 9h2v9H9V9zM13 9h2v9h-2V9z"
+                            ></path>
+                          </svg>
+                        }
                         onClick={() => remove(index)}
-                      >
-                        Delete
-                      </button>
+                      />
                     </div>
                   </div>
                 ))}
@@ -162,50 +205,60 @@ const FormikForm = ({
         />
         <CheckboxInput
           label="Show favicon"
-          labelAdditionalClassName="label-horizontal"
           name="socials.showFavicon"
           type="checkbox"
         />
       </fieldset>
-      <fieldset>
+      <fieldset className="fieldset">
         <div className="flex flex-ai-c flex-jc-sb mb-2">
-          <legend>Contact Form</legend>
-          <CheckboxInput noLabel name="contactForm.toggle" type="checkbox" />
-        </div>
-        <div style={{ width: "40%" }}>
-          <TextInput
-            label="Email Address"
-            name="contactForm.apiEmailAddress"
-            type="text"
-            placeholder=""
-            disabled={!values.contactForm.toggle}
+          <legend className="no-margin">Contact Form</legend>
+          <CheckboxInput
+            noLabel
+            toggler
+            name="contactForm.toggle"
+            type="checkbox"
           />
         </div>
-        <div style={{ width: "40%" }}>
-          <TextInput
-            label="API Key"
-            name="contactForm.apiKey"
-            type="text"
-            placeholder=""
-            disabled={!values.contactForm.toggle}
-          />
-        </div>
+        {values.contactForm.toggle && (
+          <>
+            <div className="input-wrapper">
+              <TextInput
+                label="Email Address"
+                name="contactForm.apiEmailAddress"
+                type="text"
+                placeholder=""
+                disabled={!values.contactForm.toggle}
+              />
+            </div>
+            <div className="input-wrapper">
+              <TextInput
+                label="API Key"
+                name="contactForm.apiKey"
+                type="text"
+                placeholder=""
+                disabled={!values.contactForm.toggle}
+              />
+            </div>
+          </>
+        )}
       </fieldset>
-      <button
+      <Button
+        className="btn--primary"
         type="submit"
+        text={isSubmitting ? "Saving Changes" : "Save Changes"}
         disabled={
           isSubmitting ||
           JSON.stringify(initialFormValues) === JSON.stringify(values)
         }
-        className="primary"
-      >
-        Submit
-      </button>
+        // onClick={openAllToolTip}
+      />
     </Form>
   );
 };
 
-FormikForm.defaultProps = {};
+FormikForm.defaultProps = {
+  baseUrl: "",
+};
 
 FormikForm.propTypes = {
   heading: PropTypes.string.isRequired,
@@ -219,11 +272,13 @@ FormikForm.propTypes = {
   setFieldTouched: PropTypes.func.isRequired,
   initialFormValues: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
+  baseUrl: PropTypes.string,
 };
 
 const LinkFrom = ({
   heading,
   getFormValues,
+  baseUrl,
   getFormErrors,
   initialFormValues,
 }) => {
@@ -326,6 +381,7 @@ const LinkFrom = ({
               setFieldTouched={setFieldTouched}
               errors={errors}
               path={router.pathname}
+              baseUrl={baseUrl}
               touched={touched}
               isSubmitting={isSubmitting}
               getFormValues={getFormValues}
@@ -338,10 +394,13 @@ const LinkFrom = ({
   );
 };
 
-LinkFrom.defaultProps = {};
+LinkFrom.defaultProps = {
+  baseUrl: "",
+};
 
 LinkFrom.propTypes = {
   heading: PropTypes.string.isRequired,
+  baseUrl: PropTypes.string,
   getFormValues: PropTypes.func.isRequired,
   getFormErrors: PropTypes.func.isRequired,
   initialFormValues: PropTypes.object.isRequired,

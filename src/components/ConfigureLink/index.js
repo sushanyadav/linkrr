@@ -4,7 +4,7 @@ import { useState } from "react";
 import Form from "./Form";
 import Preview from "./Preview";
 
-const ConfigureLink = ({ heading, initialFormValues }) => {
+const ConfigureLink = ({ heading, initialFormValues, baseUrl }) => {
   const [data, setData] = useState(initialFormValues);
   const [errors, setErrors] = useState({});
 
@@ -23,6 +23,7 @@ const ConfigureLink = ({ heading, initialFormValues }) => {
           initialFormValues={initialFormValues}
           getFormValues={getFormValues}
           getFormErrors={getFormErrors}
+          baseUrl={baseUrl}
         />
       </div>
       <Preview errors={errors} data={data} />
@@ -30,10 +31,13 @@ const ConfigureLink = ({ heading, initialFormValues }) => {
   );
 };
 
-ConfigureLink.defaultProps = {};
+ConfigureLink.defaultProps = {
+  baseUrl: "",
+};
 
 ConfigureLink.propTypes = {
   heading: PropTypes.string.isRequired,
+  baseUrl: PropTypes.string,
   initialFormValues: PropTypes.object.isRequired,
 };
 

@@ -33,7 +33,28 @@ const TextInput = ({
   return (
     <>
       {noLabel ? (
-        <input {...field} {...props} />
+        <div style={{ position: "relative" }}>
+          <input {...field} {...props} />
+          {meta.touched && meta.error && (
+            <div className="notification-wrapper">
+              <div
+                onMouseOver={openToolTip}
+                onMouseLeave={closeToolTip}
+                data-error={meta.error}
+                className={`${
+                  showToolTip ? "show-tooltip" : ""
+                } notification-icon error`}
+              >
+                !
+              </div>
+            </div>
+          )}
+          {/* {meta.touched && !meta.error && field.value !== "" && (
+            <div className="notification-wrapper">
+              <div className="notification-icon success">✔</div>
+            </div>
+          )} */}
+        </div>
       ) : (
         <div className={`${focused ? "focused" : ""} form-group`}>
           <input
@@ -71,11 +92,11 @@ const TextInput = ({
               </div>
             </div>
           )}
-          {meta.touched && !meta.error && field.value !== "" && (
+          {/* {meta.touched && !meta.error && field.value !== "" && (
             <div className="notification-wrapper">
               <div className="notification-icon success">✔</div>
             </div>
-          )}
+          )} */}
         </div>
       )}
     </>

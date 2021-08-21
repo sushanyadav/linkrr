@@ -1,26 +1,35 @@
 import PropTypes from "prop-types";
 import { useField } from "formik";
 
-const CheckboxInput = ({
-  label,
-  labelAdditionalClassName,
-  noLabel,
-  ...props
-}) => {
+const CheckboxInput = ({ label, noLabel, toggler, customStyle, ...props }) => {
   const [field, meta] = useField(props);
 
   return (
     <>
       {noLabel ? (
-        <input {...field} {...props} />
+        <div className={`${toggler ? "switch" : "checkbox"}`}>
+          <input
+            id={props.id || props.name}
+            style={customStyle}
+            className="no-margin"
+            {...field}
+            {...props}
+          />
+          <label
+            className="label-horizontal checkbox__label"
+            htmlFor={props.id || props.name}
+          ></label>
+        </div>
       ) : (
-        <label
-          className={labelAdditionalClassName}
-          htmlFor={props.id || props.name}
-        >
-          <span className="mr-1">{label}</span>
-          <input {...field} {...props} />
-        </label>
+        <div className={`${toggler ? "switch" : "checkbox"}`}>
+          <input {...field} {...props} id={props.id || props.name} />
+          <label
+            className="label-horizontal checkbox__label"
+            htmlFor={props.id || props.name}
+          >
+            {label}
+          </label>
+        </div>
       )}
 
       {meta.touched && meta.error ? (
@@ -34,18 +43,20 @@ CheckboxInput.defaultProps = {
   type: "text",
   placeholder: "",
   noLabel: false,
+  toggler: false,
   label: "",
-  labelAdditionalClassName: "",
+  customStyle: {},
 };
 
 CheckboxInput.propTypes = {
   type: PropTypes.string,
+  customStyle: PropTypes.object,
   id: PropTypes.string,
   name: PropTypes.string.isRequired,
   placeholder: PropTypes.string,
-  labelAdditionalClassName: PropTypes.string,
   label: PropTypes.string,
   noLabel: PropTypes.bool,
+  toggler: PropTypes.bool,
 };
 
 export default CheckboxInput;

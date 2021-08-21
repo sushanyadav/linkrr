@@ -1,6 +1,10 @@
 .link-wrapper {
-  height: 100%;
+  height: 60%;
   min-width: 375px;
+
+  &.rounded {
+    border-radius: 16px;
+  }
 
   &.full-height {
     min-height: 100vh;
@@ -11,7 +15,7 @@
   }
 
   .link {
-    min-height: 100%;
+    min-height: 70vh;
 
     @extend .flex;
     @extend .flex-col;

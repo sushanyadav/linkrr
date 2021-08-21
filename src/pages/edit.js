@@ -12,7 +12,11 @@ import { connectToDatabase } from "lib/db";
 
 const CryptoJS = require("crypto-js");
 
-export default function EditPage({ errorFromServer, initialFormValues }) {
+export default function EditPage({
+  baseUrl,
+  errorFromServer,
+  initialFormValues,
+}) {
   useEffect(() => {
     if (initialFormValues) {
       imageToBase64(
@@ -24,16 +28,10 @@ export default function EditPage({ errorFromServer, initialFormValues }) {
     }
   }, [initialFormValues]);
 
-  useEffect(() => {
-    if (document && !errorFromServer) {
-      document.querySelector("#dummy").click();
-    }
-  }, [errorFromServer]);
-
   if (errorFromServer) {
     return (
       <Layout>
-        <div className="container center-vph-w-header">
+        <div className="container">
           {errorFromServer === "link_don't_exists" ? (
             <p>
               You haven&apos;t created the link yet. Visit{" "}
@@ -49,10 +47,15 @@ export default function EditPage({ errorFromServer, initialFormValues }) {
 
   return (
     <Layout>
-      <section className="container">
-        <div id="dummy"></div>
-        <ConfigureLink heading="Edit" initialFormValues={initialFormValues} />
-      </section>
+      <div className="link-section">
+        <section className="container">
+          <ConfigureLink
+            baseUrl={baseUrl}
+            heading="Edit your OneLink"
+            initialFormValues={initialFormValues}
+          />
+        </section>
+      </div>
     </Layout>
   );
 }
@@ -61,12 +64,14 @@ EditPage.defaultProps = {
   session: undefined,
   initialFormValues: undefined,
   errorFromServer: undefined,
+  baseUrl: "",
 };
 
 EditPage.propTypes = {
   session: PropTypes.object,
   initialFormValues: PropTypes.object,
   errorFromServer: PropTypes.string,
+  baseUrl: PropTypes.string,
 };
 
 export async function getServerSideProps(context) {
@@ -125,6 +130,7 @@ export async function getServerSideProps(context) {
     return {
       props: {
         initialFormValues: user.data,
+        baseUrl: process.env.BASE_URL,
         session,
       },
     };
